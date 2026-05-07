@@ -1,0 +1,266 @@
+@import "tailwindcss";
+
+@theme {
+  /* Body sans — Pretendard with friendlier stylistic sets enabled in body{} */
+  --font-sans:
+    "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", "Segoe UI", system-ui, sans-serif;
+  /* Display — rounded geometric sans for English / numerals only.
+     Falls through to Pretendard for Korean so the page never feels mismatched. */
+  --font-display:
+    "Quicksand", "Pretendard Variable", "Pretendard", -apple-system,
+    "Apple SD Gothic Neo", system-ui, sans-serif;
+
+  /* Page surface — soft pastel sky cream */
+  --color-cream-50: #fbfaff;
+  --color-cream-100: #f3eefb;
+  --color-cream-200: #e7defa;
+
+  /* Ink — rebalanced for stable, readable contrast on pastel surfaces.
+     Headings use 900, paragraphs use 600 (the new most-used body tone),
+     captions / muted use 500/400. */
+  --color-ink-900: #221c3d;
+  --color-ink-800: #322b53;
+  --color-ink-700: #4d456e;
+  --color-ink-600: #65597e;
+  --color-ink-500: #7b6f95;
+  --color-ink-400: #a299bc;
+  --color-ink-300: #cdc6dd;
+
+  /* "grape" — pastel lavender (clay cloud accent) */
+  --color-grape-50: #f4f1ff;
+  --color-grape-100: #ebe4ff;
+  --color-grape-200: #d8ccff;
+  --color-grape-400: #b9abf3;
+  --color-grape-500: #a594e6;
+  --color-grape-600: #8e7dd4;
+  --color-grape-700: #7868bc;
+  --color-grape-800: #6453a8;
+
+  /* Soft peach — clay sunset bump */
+  --color-peach-100: #ffe7dc;
+  --color-peach-200: #ffd2bd;
+  --color-peach-300: #ffbb9b;
+  --color-peach-400: #ffa37c;
+  --color-peach-500: #fb8a60;
+
+  /* Pastel mint */
+  --color-mint-100: #ddf5e8;
+  --color-mint-200: #c0ecd3;
+  --color-mint-300: #a4e1bf;
+  --color-mint-400: #82d2a3;
+  --color-mint-500: #66c08c;
+
+  /* Butter sun */
+  --color-sun-100: #fff2cc;
+  --color-sun-300: #fcdb81;
+  --color-sun-500: #f4bc52;
+
+  /* Blush rose */
+  --color-rose-100: #ffe1e8;
+  --color-rose-200: #ffccd6;
+  --color-rose-300: #ffb1c1;
+  --color-rose-400: #fa9bae;
+  --color-rose-500: #f58fa4;
+
+  /* Pastel sky */
+  --color-sky-50: #eff6ff;
+  --color-sky-100: #dfeefd;
+  --color-sky-200: #c6e0fa;
+  --color-sky-300: #a5cff7;
+  --color-sky-400: #82bdf2;
+  --color-sky-500: #6aaeec;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-ink-700);
+    background-color: var(--color-cream-50);
+    background-image:
+      radial-gradient(
+        1100px 520px at 80% -10%,
+        rgba(255, 209, 220, 0.4),
+        transparent 60%
+      ),
+      radial-gradient(
+        900px 480px at -10% 0%,
+        rgba(216, 204, 255, 0.42),
+        transparent 60%
+      ),
+      radial-gradient(
+        800px 420px at 50% 110%,
+        rgba(198, 224, 250, 0.36),
+        transparent 60%
+      );
+    background-attachment: fixed;
+    /* Pretendard's friendlier stylistic alternates for a softer, rounder feel
+       (single-storey g, rounded a, alt numerals) — combined with kerning
+       and contextual alternates for delicate Korean rhythm. */
+    font-feature-settings: "ss01", "ss02", "ss03", "calt", "kern";
+    text-rendering: optimizeLegibility;
+    letter-spacing: -0.005em;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--color-ink-900);
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+  }
+
+  /* Numbers feel more stable when tabular — for stat chips, percentages, age, etc. */
+  .tabular,
+  time,
+  output {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background-color: var(--color-grape-200);
+    color: var(--color-ink-900);
+  }
+}
+
+@layer utilities {
+  .container-page {
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .container-page {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* English / numerals display */
+  .font-display {
+    font-family: var(--font-display);
+    font-feature-settings: "ss01", "calt";
+  }
+
+  /* Soft pastel decorative blur */
+  .blob {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(64px);
+    opacity: 0.45;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* "Clay" depth — soft top highlight + diffused pastel shadow underneath. */
+  .clay-shadow {
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.85) inset,
+      0 -2px 0 rgba(120, 104, 188, 0.05) inset,
+      0 12px 28px -14px rgba(120, 104, 188, 0.22),
+      0 4px 10px -4px rgba(165, 148, 230, 0.14);
+  }
+
+  .clay-shadow-sm {
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.75) inset,
+      0 6px 14px -8px rgba(120, 104, 188, 0.18),
+      0 2px 5px -2px rgba(165, 148, 230, 0.12);
+  }
+
+  .cloud-shadow {
+    filter: drop-shadow(0 14px 24px rgba(120, 104, 188, 0.18))
+      drop-shadow(0 3px 5px rgba(165, 148, 230, 0.12));
+  }
+
+  .cloud-shadow-sm {
+    filter: drop-shadow(0 8px 14px rgba(120, 104, 188, 0.14))
+      drop-shadow(0 2px 3px rgba(165, 148, 230, 0.1));
+  }
+
+  .clip-cloud {
+    -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 140'><path d='M48 116 C26 116 14 100 24 84 C8 80 10 58 28 56 C20 38 40 24 56 32 C60 14 88 10 96 26 C108 8 138 12 142 34 C166 28 188 42 184 62 C204 64 210 84 196 94 C214 102 206 122 184 116 L48 116 Z' fill='black'/></svg>");
+    mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 140'><path d='M48 116 C26 116 14 100 24 84 C8 80 10 58 28 56 C20 38 40 24 56 32 C60 14 88 10 96 26 C108 8 138 12 142 34 C166 28 188 42 184 62 C204 64 210 84 196 94 C214 102 206 122 184 116 L48 116 Z' fill='black'/></svg>");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+  }
+
+  .ring-soft {
+    box-shadow:
+      inset 0 0 0 1px rgba(185, 171, 243, 0.22),
+      0 8px 24px -10px rgba(142, 125, 212, 0.22);
+  }
+}
+
+/* Calmer animations — gentle, almost imperceptible drift for a steady mood. */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(1.2deg); }
+}
+
+@keyframes float-slower {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(8px) rotate(-1.6deg); }
+}
+
+@keyframes drift {
+  0% { transform: translateX(0px) translateY(0px); }
+  50% { transform: translateX(14px) translateY(-4px); }
+  100% { transform: translateX(0px) translateY(0px); }
+}
+
+@keyframes drift-reverse {
+  0% { transform: translateX(0px) translateY(0px); }
+  50% { transform: translateX(-16px) translateY(6px); }
+  100% { transform: translateX(0px) translateY(0px); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.65; transform: scale(1); }
+  50% { opacity: 0.95; transform: scale(1.04); }
+}
+
+.animate-float-slow {
+  animation: float-slow 11s ease-in-out infinite;
+}
+.animate-float-slower {
+  animation: float-slower 14s ease-in-out infinite;
+}
+.animate-drift {
+  animation: drift 22s ease-in-out infinite;
+}
+.animate-drift-reverse {
+  animation: drift-reverse 28s ease-in-out infinite;
+}
+.animate-pulse-soft {
+  animation: pulse-soft 4.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float-slow,
+  .animate-float-slower,
+  .animate-drift,
+  .animate-drift-reverse,
+  .animate-pulse-soft {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}

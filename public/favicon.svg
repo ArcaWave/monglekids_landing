@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#EBE4FF" />
+      <stop offset="100%" stop-color="#FFE7DC" />
+    </linearGradient>
+    <linearGradient id="cloud" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F3EEFB" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#bg)" />
+  <!-- chubby clay cloud -->
+  <path
+    d="M14 44 C8 44 5 38 10 33 C5 31 7 23 14 22 C12 16 20 12 25 16 C26 9 36 8 38 15 C42 9 52 12 52 19 C58 19 60 27 54 30 C58 33 55 39 50 38 L14 44 Z"
+    fill="url(#cloud)"
+  />
+  <!-- cheeks -->
+  <ellipse cx="22" cy="33" rx="3" ry="1.6" fill="#FFB1C1" opacity="0.7" />
+  <ellipse cx="42" cy="33" rx="3" ry="1.6" fill="#FFB1C1" opacity="0.7" />
+  <!-- eyes -->
+  <circle cx="26" cy="29" r="1.6" fill="#2A2440" />
+  <circle cx="38" cy="29" r="1.6" fill="#2A2440" />
+  <!-- smile -->
+  <path d="M30 35 Q32 37 34 35" stroke="#2A2440" stroke-width="1.6" stroke-linecap="round" fill="none" />
+  <!-- sparkles -->
+  <circle cx="50" cy="14" r="2" fill="#FCDB81" />
+  <circle cx="12" cy="12" r="1.5" fill="#A5CFF7" />
+</svg>
