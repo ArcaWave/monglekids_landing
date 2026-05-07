@@ -1,6 +1,7 @@
 import { ArrowRight, Sparkles, Play } from "lucide-react";
 import HeroMock from "./HeroMock";
 import Cloud from "./Cloud";
+import { useLang, withBreaks } from "../i18n/LanguageContext";
 
 type Props = {
   onPrimary: () => void;
@@ -8,13 +9,12 @@ type Props = {
 };
 
 export default function Hero({ onPrimary, onSecondary }: Props) {
+  const { t } = useLang();
   return (
     <section id="top" className="relative overflow-hidden pt-12 md:pt-20">
-      {/* soft pastel ambient blobs (lighter, calmer) */}
       <div className="blob -left-32 top-24 h-[420px] w-[420px] bg-grape-200" />
       <div className="blob right-[-120px] top-[-60px] h-[380px] w-[380px] bg-rose-200" />
 
-      {/* two drifting clay clouds — calmer than before */}
       <span
         className="animate-drift cloud-shadow-sm pointer-events-none absolute -left-6 top-28 hidden w-[140px] sm:block"
         aria-hidden
@@ -32,26 +32,24 @@ export default function Hero({ onPrimary, onSecondary }: Props) {
         <div className="lg:col-span-6">
           <div className="font-display inline-flex items-center gap-2 rounded-full bg-white/85 px-3.5 py-1.5 text-[12px] font-semibold tracking-wide text-grape-700 ring-1 ring-grape-100 backdrop-blur clay-shadow-sm">
             <Sparkles className="h-3.5 w-3.5" />
-            5–9세 아이를 위한 AI 창의 성장 베타
+            {t.hero.eyebrow}
           </div>
 
           <h1 className="mt-5 text-balance text-[32px] font-bold leading-[1.22] tracking-tight text-ink-900 sm:text-[40px] md:text-[50px]">
-            AI 시대, 아이에게 필요한 건
+            {t.hero.titlePre}
             <br className="hidden sm:inline" />{" "}
             <span className="relative inline-block">
-              <span className="relative z-10 text-grape-700">더 많은 콘텐츠</span>
+              <span className="relative z-10 text-grape-700">{t.hero.titleHighlight}</span>
               <span
                 aria-hidden
                 className="absolute bottom-1 left-0 z-0 h-2.5 w-full rounded-full bg-sun-100/80"
               />
             </span>
-            가 아니라
-            <br />
-            스스로 상상하고 만드는 힘입니다.
+            {withBreaks(t.hero.titlePost)}
           </h1>
 
           <p className="mt-5 max-w-md text-balance text-[16px] leading-[1.7] text-ink-600 md:text-[17px]">
-            아이가 AI와 함께 상상하고 만드는 창의 성장 동반자.
+            {t.hero.sub}
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -59,7 +57,7 @@ export default function Hero({ onPrimary, onSecondary }: Props) {
               onClick={onPrimary}
               className="group inline-flex items-center justify-center gap-2 rounded-full bg-grape-700 px-6 py-3.5 text-[15px] font-semibold text-white transition hover:bg-grape-800 clay-shadow"
             >
-              베타 신청하기
+              {t.hero.ctaPrimary}
               <ArrowRight className="h-4.5 w-4.5 transition-transform group-hover:translate-x-1" />
             </button>
             <button
@@ -69,7 +67,7 @@ export default function Hero({ onPrimary, onSecondary }: Props) {
               <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-grape-100 text-grape-700">
                 <Play className="h-3.5 w-3.5 fill-current" />
               </span>
-              아이 경험 미리보기
+              {t.hero.ctaSecondary}
             </button>
           </div>
 
@@ -88,8 +86,8 @@ export default function Hero({ onPrimary, onSecondary }: Props) {
               ))}
             </div>
             <p>
-              <span className="tabular font-semibold text-ink-800">+1,200명</span>
-              의 부모가 먼저 베타를 기다리고 있어요
+              <span className="tabular font-semibold text-ink-800">{t.hero.socialStrong}</span>
+              {t.hero.socialRest}
             </p>
           </div>
         </div>

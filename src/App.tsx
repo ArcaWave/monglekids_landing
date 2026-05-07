@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Problem from "./components/Problem";
@@ -12,6 +12,7 @@ import BetaForm from "./components/BetaForm";
 import FAQ from "./components/FAQ";
 import FinalCTA from "./components/FinalCTA";
 import Footer from "./components/Footer";
+import { LanguageProvider } from "./i18n/LanguageContext";
 
 export default function App() {
   const [, setBump] = useState(0);
@@ -25,25 +26,27 @@ export default function App() {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-x-clip bg-cream-50 text-ink-800">
-      <Header onCtaClick={() => scrollToId("beta")} onNavClick={scrollToId} />
-      <main>
-        <Hero
-          onPrimary={() => scrollToId("beta")}
-          onSecondary={() => scrollToId("experience")}
-        />
-        <Problem />
-        <Shift />
-        <Solution />
-        <Experience />
-        <ParentValue onCta={() => scrollToId("beta")} />
-        <Differentiation />
-        <Framework />
-        <BetaForm />
-        <FAQ />
-        <FinalCTA onCta={() => scrollToId("beta")} />
-      </main>
-      <Footer />
-    </div>
+    <LanguageProvider>
+      <div className="relative min-h-screen overflow-x-clip bg-cream-50 text-ink-800">
+        <Header onCtaClick={() => scrollToId("beta")} onNavClick={scrollToId} />
+        <main>
+          <Hero
+            onPrimary={() => scrollToId("beta")}
+            onSecondary={() => scrollToId("experience")}
+          />
+          <Problem />
+          <Shift />
+          <Solution />
+          <Experience />
+          <ParentValue onCta={() => scrollToId("beta")} />
+          <Differentiation />
+          <Framework />
+          <BetaForm />
+          <FAQ />
+          <FinalCTA onCta={() => scrollToId("beta")} />
+        </main>
+        <Footer />
+      </div>
+    </LanguageProvider>
   );
 }

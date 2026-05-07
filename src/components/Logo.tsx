@@ -1,10 +1,12 @@
 import Cloud from "./Cloud";
+import { useLang } from "../i18n/LanguageContext";
 
 type Props = {
   size?: number;
 };
 
 export default function Logo({ size = 44 }: Props) {
+  const { t } = useLang();
   return (
     <div className="flex items-center gap-2.5">
       <span
@@ -24,10 +26,10 @@ export default function Logo({ size = 44 }: Props) {
       </span>
       <div className="flex flex-col leading-tight">
         <span className="text-[15px] font-bold tracking-tight text-ink-900">
-          몽글키즈
+          {t.logo.primary}
         </span>
-        <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-ink-400">
-          MongleKids
+        <span className="font-display text-[10px] font-medium uppercase tracking-[0.18em] text-ink-400">
+          {t.logo.secondary}
         </span>
       </div>
     </div>

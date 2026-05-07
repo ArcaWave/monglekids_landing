@@ -1,22 +1,25 @@
 import { useEffect, useState } from "react";
 import { Menu, X, ArrowRight } from "lucide-react";
 import Logo from "./Logo";
+import LangToggle from "./LangToggle";
+import { useLang } from "../i18n/LanguageContext";
 
 type Props = {
   onCtaClick: () => void;
   onNavClick: (id: string) => void;
 };
 
-const NAV = [
-  { id: "why", label: "왜 몽글키즈인가" },
-  { id: "experience", label: "아이 경험" },
-  { id: "report", label: "부모 리포트" },
-  { id: "beta", label: "베타 신청" },
-];
-
 export default function Header({ onCtaClick, onNavClick }: Props) {
+  const { t } = useLang();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const NAV = [
+    { id: "why", label: t.nav.why },
+    { id: "experience", label: t.nav.experience },
+    { id: "report", label: t.nav.report },
+    { id: "beta", label: t.nav.beta },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -42,13 +45,13 @@ export default function Header({ onCtaClick, onNavClick }: Props) {
       <div className="container-page flex h-16 items-center justify-between md:h-[72px]">
         <button
           onClick={() => onNavClick("top")}
-          aria-label="몽글키즈 홈"
+          aria-label={t.nav.home}
           className="rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-grape-400"
         >
           <Logo />
         </button>
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label="주요 메뉴">
+        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
           {NAV.map((item) => (
             <button
               key={item.id}
@@ -60,23 +63,27 @@ export default function Header({ onCtaClick, onNavClick }: Props) {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-2 md:flex">
+          <LangToggle />
           <button
             onClick={onCtaClick}
             className="group inline-flex items-center gap-1.5 rounded-full bg-grape-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-grape-800 clay-shadow-sm"
           >
-            베타 신청하기
+            {t.nav.cta}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </button>
         </div>
 
-        <button
-          aria-label={open ? "메뉴 닫기" : "메뉴 열기"}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/80 ring-1 ring-grape-100 md:hidden"
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <LangToggle />
+          <button
+            aria-label={open ? t.nav.close : t.nav.open}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/80 ring-1 ring-grape-100"
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
 
       {open && (
@@ -97,9 +104,9 @@ export default function Header({ onCtaClick, onNavClick }: Props) {
                   onCtaClick();
                   setOpen(false);
                 }}
-                className="mt-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-grape-600 px-3 py-3 text-sm font-semibold text-white"
+                className="mt-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-grape-700 px-3 py-3 text-sm font-semibold text-white"
               >
-                베타 신청하기 <ArrowRight className="h-4 w-4" />
+                {t.nav.cta} <ArrowRight className="h-4 w-4" />
               </button>
             </div>
           </div>

@@ -1,47 +1,37 @@
 import { Brain, Wand2, Hand, BarChart3 } from "lucide-react";
 import SectionHeader from "./SectionHeader";
 import Cloud from "./Cloud";
+import { useLang } from "../i18n/LanguageContext";
 
-const FEATURES = [
+const STYLES = [
   {
     icon: Brain,
-    title: "아이를 기억하는 AI",
-    body: "관심사와 창작물을 기억해 다음 경험으로 이어줘요.",
     accent: "from-grape-300 to-rose-200",
     text: "text-grape-700",
-    chip: "Personal Memory",
     soft: "from-grape-50",
   },
   {
     icon: Wand2,
-    title: "상상력을 깨우는 창작 미션",
-    body: "이야기, 캐릭터, 역할놀이로 직접 생각을 펼쳐요.",
     accent: "from-peach-200 to-sun-100",
     text: "text-peach-500",
-    chip: "Creative Mission",
     soft: "from-peach-100",
   },
   {
     icon: Hand,
-    title: "보는 시간이 아닌, 만드는 시간",
-    body: "말하고, 고르고, 만들고, 설명하며 직접 참여해요.",
     accent: "from-mint-200 to-sky-100",
     text: "text-mint-500",
-    chip: "Active Play",
     soft: "from-mint-100",
   },
   {
     icon: BarChart3,
-    title: "부모를 위한 성장 리포트",
-    body: "관심사 · 질문 · 몰입의 흐름을 한눈에 보여드려요.",
     accent: "from-sky-200 to-grape-200",
     text: "text-sky-500",
-    chip: "Parent Report",
     soft: "from-sky-100",
   },
 ];
 
 export default function Solution() {
+  const { t } = useLang();
   return (
     <section id="report" className="relative py-20 md:py-28">
       <span
@@ -59,26 +49,27 @@ export default function Solution() {
 
       <div className="container-page relative">
         <SectionHeader
-          eyebrow="WHAT WE BUILT"
+          eyebrow={t.solution.eyebrow}
           title={
             <>
-              아이만의{" "}
-              <span className="text-grape-700">AI 창의 동반자.</span>
+              {t.solution.titlePre}
+              <span className="text-grape-700">{t.solution.titleHighlight}</span>
             </>
           }
         />
 
         <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2">
-          {FEATURES.map((f) => {
-            const Icon = f.icon;
+          {t.solution.features.map((f, i) => {
+            const s = STYLES[i];
+            const Icon = s.icon;
             return (
               <article
                 key={f.title}
-                className={`group relative overflow-hidden rounded-[28px] bg-gradient-to-br ${f.soft} via-white to-white p-7 ring-1 ring-grape-100/80 transition hover:-translate-y-0.5 clay-shadow`}
+                className={`group relative overflow-hidden rounded-[28px] bg-gradient-to-br ${s.soft} via-white to-white p-7 ring-1 ring-grape-100/80 transition hover:-translate-y-0.5 clay-shadow`}
               >
                 <div className="flex items-start justify-between">
                   <span
-                    className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${f.accent} ${f.text} clay-shadow-sm`}
+                    className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${s.accent} ${s.text} clay-shadow-sm`}
                   >
                     <Icon className="h-5.5 w-5.5" />
                   </span>

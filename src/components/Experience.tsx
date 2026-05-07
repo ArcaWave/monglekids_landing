@@ -1,43 +1,18 @@
 import { Sparkles, MessageCircle, Palette, Mic } from "lucide-react";
 import SectionHeader from "./SectionHeader";
 import Cloud from "./Cloud";
+import { useLang, withBreaks } from "../i18n/LanguageContext";
 
-const STEPS = [
-  {
-    n: "01",
-    icon: Sparkles,
-    title: "오늘의 상상 미션",
-    body: "매일 아이만을 위한 작은 상상이 도착해요.",
-    accent: "from-grape-300 to-rose-200",
-    text: "text-grape-700",
-  },
-  {
-    n: "02",
-    icon: MessageCircle,
-    title: "AI 친구와 대화",
-    body: "정답 대신, 좋은 질문으로 생각을 넓혀요.",
-    accent: "from-peach-200 to-sun-100",
-    text: "text-peach-500",
-  },
-  {
-    n: "03",
-    icon: Palette,
-    title: "직접 만들고 표현하기",
-    body: "캐릭터 · 이야기 · 장면을 아이가 직접 그려요.",
-    accent: "from-mint-200 to-sky-200",
-    text: "text-mint-500",
-  },
-  {
-    n: "04",
-    icon: Mic,
-    title: "다음 모험으로 이어지기",
-    body: "AI가 표현을 기억하고, 다음 미션으로 이어줘요.",
-    accent: "from-sky-200 to-grape-200",
-    text: "text-sky-500",
-  },
+const STEP_STYLES = [
+  { icon: Sparkles, accent: "from-grape-300 to-rose-200", text: "text-grape-700" },
+  { icon: MessageCircle, accent: "from-peach-200 to-sun-100", text: "text-peach-500" },
+  { icon: Palette, accent: "from-mint-200 to-sky-200", text: "text-mint-500" },
+  { icon: Mic, accent: "from-sky-200 to-grape-200", text: "text-sky-500" },
 ];
 
 export default function Experience() {
+  const { t } = useLang();
+  const e = t.experience;
   return (
     <section
       id="experience"
@@ -47,7 +22,6 @@ export default function Experience() {
           "linear-gradient(180deg, #d6cdf1 0%, #e1cee2 55%, #f6d3d3 100%)",
       }}
     >
-      {/* three calm drifting clouds */}
       <span
         className="animate-drift cloud-shadow-sm pointer-events-none absolute -left-8 top-16 hidden w-[180px] opacity-90 sm:block"
         aria-hidden
@@ -67,22 +41,21 @@ export default function Experience() {
         <Cloud fill="rgba(255,255,255,0.85)" highlight="rgba(255,255,255,1)" className="block w-full" />
       </span>
 
-      {/* a few quiet stars */}
       <div className="pointer-events-none absolute inset-0">
         {[
           { left: "12%", top: "20%", s: 4, d: 0 },
           { left: "78%", top: "16%", s: 5, d: 0.6 },
           { left: "50%", top: "10%", s: 3, d: 1.2 },
-        ].map((t, i) => (
+        ].map((tw, i) => (
           <span
             key={i}
             className="animate-pulse-soft absolute rounded-full bg-white/80"
             style={{
-              left: t.left,
-              top: t.top,
-              width: t.s,
-              height: t.s,
-              animationDelay: `${t.d}s`,
+              left: tw.left,
+              top: tw.top,
+              width: tw.s,
+              height: tw.s,
+              animationDelay: `${tw.d}s`,
             }}
           />
         ))}
@@ -90,21 +63,22 @@ export default function Experience() {
 
       <div className="container-page relative">
         <SectionHeader
-          eyebrow="CHILD EXPERIENCE"
+          eyebrow={e.eyebrow}
           title={
             <>
-              시청자가 아닌,{" "}
-              <span className="text-grape-700">창작자로.</span>
+              {e.titlePre}
+              <span className="text-grape-700">{e.titleHighlight}</span>
             </>
           }
           tone="dark"
         />
 
         <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
-          {STEPS.map((s, i) => {
+          {e.steps.map((step, i) => {
+            const s = STEP_STYLES[i];
             const Icon = s.icon;
             return (
-              <div key={s.n} className="relative">
+              <div key={step.title} className="relative">
                 <article className="group relative h-full overflow-hidden rounded-3xl bg-white/85 p-6 ring-1 ring-white/60 backdrop-blur transition hover:-translate-y-0.5 hover:bg-white clay-shadow-sm">
                   <div className="flex items-start justify-between">
                     <span
@@ -113,18 +87,18 @@ export default function Experience() {
                       <Icon className="h-5.5 w-5.5" />
                     </span>
                     <span className="font-display text-[12px] font-semibold tracking-[0.18em] text-ink-400">
-                      STEP {s.n}
+                      {e.stepLabel} {String(i + 1).padStart(2, "0")}
                     </span>
                   </div>
                   <h3 className="mt-5 text-[18px] font-semibold leading-snug text-ink-900">
-                    {s.title}
+                    {step.title}
                   </h3>
                   <p className="mt-2 text-[14.5px] leading-relaxed text-ink-600">
-                    {s.body}
+                    {step.body}
                   </p>
                 </article>
 
-                {i < STEPS.length - 1 && (
+                {i < e.steps.length - 1 && (
                   <span
                     aria-hidden
                     className="pointer-events-none absolute -right-3 top-1/2 hidden -translate-y-1/2 text-2xl text-white/70 lg:block"
@@ -137,33 +111,31 @@ export default function Experience() {
           })}
         </div>
 
-        {/* Mock interaction */}
         <div className="mt-14 grid grid-cols-1 items-center gap-8 rounded-[32px] bg-white/55 p-6 ring-1 ring-white/70 backdrop-blur md:grid-cols-12 md:p-8 clay-shadow-sm">
           <div className="md:col-span-5">
             <span className="font-display inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-[11.5px] font-semibold uppercase tracking-[0.16em] text-grape-700 ring-1 ring-white">
-              <Sparkles className="h-3.5 w-3.5" /> 대화 예시
+              <Sparkles className="h-3.5 w-3.5" /> {e.mock.chip}
             </span>
             <h3 className="mt-3 text-balance text-[22px] font-semibold leading-[1.35] text-ink-900 sm:text-[26px]">
-              정답 대신,
-              <br />
-              <span className="text-grape-700">좋은 질문을 던져요.</span>
+              {withBreaks(e.mock.titlePre)}
+              <span className="text-grape-700">{e.mock.titleHighlight}</span>
             </h3>
             <p className="mt-3 text-[14.5px] leading-relaxed text-ink-600">
-              아이의 작은 아이디어를 한 단계 더 키워주는 대화.
+              {e.mock.body}
             </p>
           </div>
 
           <div className="md:col-span-7">
             <div className="space-y-3 rounded-3xl bg-white p-5 ring-1 ring-grape-100 clay-shadow-sm sm:p-6">
-              <ChatBubble who="ai" name="몽글이">
-                오늘은 구름으로 만든 동물원을 상상해볼까?
-              </ChatBubble>
-              <ChatBubble who="child" name="우리 아이">
-                나는 번개를 먹는 코끼리를 만들래!
-              </ChatBubble>
-              <ChatBubble who="ai" name="몽글이">
-                멋진 상상이야. 화가 나면 어떤 소리를 낼까?
-              </ChatBubble>
+              {e.mock.bubbles.map((b, i) => (
+                <ChatBubble
+                  key={i}
+                  who={b.who as "ai" | "child"}
+                  name={b.who === "ai" ? e.mock.aiName : e.mock.childName}
+                >
+                  {b.text}
+                </ChatBubble>
+              ))}
             </div>
           </div>
         </div>
@@ -205,7 +177,7 @@ function ChatBubble({
         )}
       </span>
       <div className={`flex max-w-[80%] flex-col ${isAi ? "items-start" : "items-end"}`}>
-        <span className="mb-0.5 text-[10px] font-semibold uppercase tracking-widest text-ink-400">
+        <span className="font-display mb-0.5 text-[10.5px] font-semibold uppercase tracking-[0.16em] text-ink-400">
           {name}
         </span>
         <div
