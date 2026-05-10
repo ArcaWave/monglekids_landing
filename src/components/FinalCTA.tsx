@@ -1,12 +1,12 @@
 import { ArrowRight, Sparkles } from "lucide-react";
 import Cloud from "./Cloud";
 import { useLang, withBreaks } from "../i18n/LanguageContext";
+import { useScrollToSection } from "../lib/useScrollToSection";
 
-type Props = { onCta: () => void };
-
-export default function FinalCTA({ onCta }: Props) {
+export default function FinalCTA() {
   const { t } = useLang();
   const f = t.finalCta;
+  const scrollTo = useScrollToSection();
   return (
     <section className="relative px-5 pb-20 md:pb-28">
       <div className="container-page">
@@ -68,7 +68,7 @@ export default function FinalCTA({ onCta }: Props) {
 
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <button
-                onClick={onCta}
+                onClick={() => scrollTo("beta")}
                 className="group inline-flex items-center justify-center gap-2 rounded-full bg-grape-700 px-7 py-4 text-[15px] font-semibold text-white transition hover:bg-grape-800 clay-shadow"
               >
                 {f.cta}

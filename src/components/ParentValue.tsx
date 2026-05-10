@@ -1,6 +1,7 @@
 import { ArrowRight, Check, ShieldCheck, Sparkles, LineChart, Clock } from "lucide-react";
 import SectionHeader from "./SectionHeader";
 import { useLang } from "../i18n/LanguageContext";
+import { useScrollToSection } from "../lib/useScrollToSection";
 
 const STYLES = [
   { icon: Sparkles, accent: "text-grape-700 bg-grape-50" },
@@ -9,11 +10,10 @@ const STYLES = [
   { icon: Clock, accent: "text-mint-500 bg-mint-100" },
 ];
 
-type Props = { onCta: () => void };
-
-export default function ParentValue({ onCta }: Props) {
+export default function ParentValue() {
   const { t } = useLang();
   const p = t.parent;
+  const scrollTo = useScrollToSection();
   return (
     <section className="relative py-20 md:py-28">
       <div className="container-page grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
@@ -39,7 +39,7 @@ export default function ParentValue({ onCta }: Props) {
           </div>
 
           <button
-            onClick={onCta}
+            onClick={() => scrollTo("beta")}
             className="group mt-7 inline-flex items-center justify-center gap-2 rounded-full bg-grape-700 px-5 py-3.5 text-[15px] font-semibold text-white transition hover:bg-grape-800 clay-shadow-sm"
           >
             {p.cta}

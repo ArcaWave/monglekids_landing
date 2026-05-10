@@ -2,14 +2,11 @@ import { ArrowRight, Sparkles, Play } from "lucide-react";
 import HeroMock from "./HeroMock";
 import Cloud from "./Cloud";
 import { useLang, withBreaks } from "../i18n/LanguageContext";
+import { useScrollToSection } from "../lib/useScrollToSection";
 
-type Props = {
-  onPrimary: () => void;
-  onSecondary: () => void;
-};
-
-export default function Hero({ onPrimary, onSecondary }: Props) {
+export default function Hero() {
   const { t } = useLang();
+  const scrollTo = useScrollToSection();
   return (
     <section id="top" className="relative overflow-hidden pt-12 md:pt-20">
       <div className="blob -left-32 top-24 h-[420px] w-[420px] bg-grape-200" />
@@ -54,14 +51,14 @@ export default function Hero({ onPrimary, onSecondary }: Props) {
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <button
-              onClick={onPrimary}
+              onClick={() => scrollTo("beta")}
               className="group inline-flex items-center justify-center gap-2 rounded-full bg-grape-700 px-6 py-3.5 text-[15px] font-semibold text-white transition hover:bg-grape-800 clay-shadow"
             >
               {t.hero.ctaPrimary}
               <ArrowRight className="h-4.5 w-4.5 transition-transform group-hover:translate-x-1" />
             </button>
             <button
-              onClick={onSecondary}
+              onClick={() => scrollTo("experience")}
               className="group inline-flex items-center justify-center gap-2 rounded-full bg-white/80 px-5 py-3.5 text-[15px] font-semibold text-ink-800 ring-1 ring-grape-100 backdrop-blur transition hover:bg-white clay-shadow-sm"
             >
               <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-grape-100 text-grape-700">

@@ -1,0 +1,8 @@
+# MongleKids — robots.txt
+# https://www.monglekids.com
+
+User-agent: *
+Allow: /
+
+# Surface our sitemap to all major crawlers (Google, Naver, Bing, Yandex, ...)
+Sitemap: https://www.monglekids.com/sitemap.xml

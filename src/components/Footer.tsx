@@ -1,19 +1,10 @@
+import { Link } from "react-router-dom";
 import Logo from "./Logo";
 import { useLang } from "../i18n/LanguageContext";
+import { SITE } from "../seo/site";
 
-type Props = {
-  onNavigate?: (to: string) => void;
-};
-
-export default function Footer({ onNavigate }: Props) {
+export default function Footer() {
   const { t } = useLang();
-
-  const handlePrivacy = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!onNavigate) return;
-    e.preventDefault();
-    onNavigate("/privacy");
-  };
-
   return (
     <footer className="border-t border-grape-100/70 bg-cream-50">
       <div className="container-page py-12">
@@ -29,21 +20,35 @@ export default function Footer({ onNavigate }: Props) {
             aria-label="Footer"
             className="grid grid-cols-2 gap-x-8 gap-y-2 text-[13.5px] font-semibold text-ink-700 sm:grid-cols-4"
           >
-            <a className="transition hover:text-grape-700" href="/#why">{t.footer.nav.about}</a>
-            <a className="transition hover:text-grape-700" href="/#beta">{t.footer.nav.beta}</a>
-            <a className="transition hover:text-grape-700" href="/#experience">{t.footer.nav.experience}</a>
-            <a className="transition hover:text-grape-700" href="mailto:help@arcawave.xyz">{t.footer.nav.contact}</a>
-            <a className="transition hover:text-grape-700" href="/privacy" onClick={handlePrivacy}>
+            <Link className="transition hover:text-grape-700" to="/about">
+              {t.footer.nav.about}
+            </Link>
+            <Link className="transition hover:text-grape-700" to="/#beta">
+              {t.footer.nav.beta}
+            </Link>
+            <Link className="transition hover:text-grape-700" to="/method">
+              {t.footer.nav.experience}
+            </Link>
+            <a
+              className="transition hover:text-grape-700"
+              href={`mailto:${SITE.contact.email}`}
+            >
+              {t.footer.nav.contact}
+            </a>
+            <Link className="transition hover:text-grape-700" to="/privacy">
               {t.footer.nav.privacy}
-            </a>
-            <a className="transition hover:text-grape-700" href="/privacy" onClick={handlePrivacy}>
+            </Link>
+            <Link className="transition hover:text-grape-700" to="/privacy">
               {t.footer.nav.terms}
-            </a>
+            </Link>
           </nav>
         </div>
 
         <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-grape-100/60 pt-6 text-[12px] text-ink-400 md:flex-row md:items-center">
-          <p>© {new Date().getFullYear()} MongleKids · 몽글키즈. {t.footer.rights}</p>
+          <p>
+            © {new Date().getFullYear()} {SITE.operator.legalName} · 몽글키즈.{" "}
+            {t.footer.rights}
+          </p>
           <p>{t.footer.made}</p>
         </div>
       </div>

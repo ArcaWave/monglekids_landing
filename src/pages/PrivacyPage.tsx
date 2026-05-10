@@ -1,34 +1,41 @@
-import { useEffect } from "react";
 import { ArrowLeft, Mail, Globe } from "lucide-react";
-import Header from "./Header";
-import Footer from "./Footer";
-import { useLang } from "../i18n/LanguageContext";
+import { Link } from "react-router-dom";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import SEO from "../components/SEO";
+import { breadcrumbSchema, webPageSchema } from "../seo/schema";
 
-type Props = {
-  onNavigate: (to: string) => void;
-  onScrollTo: (id: string) => void;
-};
-
-export default function PrivacyPage({ onNavigate, onScrollTo }: Props) {
-  const { lang } = useLang();
-
-  useEffect(() => {
-    document.title = "몽글키즈 개인정보처리방침 · Monglekids Privacy Policy";
-  }, [lang]);
-
+export default function PrivacyPage() {
   return (
     <>
-      <Header onCtaClick={() => onScrollTo("beta")} onNavClick={onScrollTo} />
+      <SEO
+        title="개인정보처리방침 · 몽글키즈 (MongleKids Privacy Policy)"
+        description="몽글키즈(Monglekids) 개인정보처리방침. Arcawave가 운영하는 5–9세 어린이용 STEAM·AI 교육 앱의 개인정보 수집·이용·보관·보호 정책 (한국어 + English)."
+        path="/privacy"
+        jsonLd={[
+          webPageSchema({
+            url: "/privacy",
+            name: "Privacy Policy · 몽글키즈",
+            description:
+              "MongleKids privacy policy. Bilingual (Korean + English).",
+          }),
+          breadcrumbSchema([
+            { name: "Home", url: "/" },
+            { name: "Privacy Policy", url: "/privacy" },
+          ]),
+        ]}
+      />
+      <Header />
 
       <main className="container-page max-w-3xl py-14 md:py-20">
         {/* Back link */}
-        <button
-          onClick={() => onNavigate("/")}
+        <Link
+          to="/"
           className="font-display mb-8 inline-flex items-center gap-1.5 text-[13px] font-semibold text-grape-700 transition hover:text-grape-800"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           홈으로 / Back to home
-        </button>
+        </Link>
 
         {/* Hero */}
         <header className="mb-12">
@@ -985,7 +992,7 @@ export default function PrivacyPage({ onNavigate, onScrollTo }: Props) {
         </Section>
       </main>
 
-      <Footer onNavigate={onNavigate} />
+      <Footer />
     </>
   );
 }
