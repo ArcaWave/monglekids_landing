@@ -181,8 +181,6 @@ const ko = {
     eyebrowRight: "사전 신청",
     titleRight: "30초면 충분해요.",
     fields: {
-      name: "부모 이름",
-      namePh: "예: 김몽글",
       email: "이메일",
       emailPh: "parent@example.com",
       age: "아이 나이",
@@ -196,7 +194,6 @@ const ko = {
     errorGeneric: "신청을 처리하지 못했어요. 잠시 후 다시 시도해 주세요.",
     terms: "제출 시 안내 메일 수신에 동의합니다. 베타 운영 목적 외에 사용되지 않아요.",
     errors: {
-      name: "이름을 입력해 주세요.",
       email: "이메일을 입력해 주세요.",
       emailFormat: "이메일 형식이 올바르지 않아요.",
       age: "아이 나이를 입력해 주세요.",
@@ -423,8 +420,6 @@ const en: typeof ko = {
     eyebrowRight: "Early signup",
     titleRight: "Takes just 30 seconds.",
     fields: {
-      name: "Parent name",
-      namePh: "e.g. Alex Lee",
       email: "Email",
       emailPh: "parent@example.com",
       age: "Child's age",
@@ -438,7 +433,6 @@ const en: typeof ko = {
     errorGeneric: "We couldn't process your signup. Please try again in a moment.",
     terms: "By submitting, you agree to receive beta updates. Used only for the beta program.",
     errors: {
-      name: "Please enter your name.",
       email: "Please enter your email.",
       emailFormat: "Please enter a valid email.",
       age: "Please enter your child's age.",

@@ -1,16 +1,15 @@
 import { useState, type FormEvent } from "react";
-import { ArrowRight, CheckCircle2, Sparkles, ChevronDown, Mail, User, Baby } from "lucide-react";
+import { ArrowRight, CheckCircle2, Sparkles, ChevronDown, Mail, Baby } from "lucide-react";
 import SectionHeader from "./SectionHeader";
 import Cloud from "./Cloud";
 import { useLang, withBreaks } from "../i18n/LanguageContext";
 import { submitWaitlist } from "../lib/waitlist";
 
-type Errors = Partial<Record<"name" | "email" | "age", string>>;
+type Errors = Partial<Record<"email" | "age", string>>;
 
 export default function BetaForm() {
   const { t, lang } = useLang();
   const b = t.beta;
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [age, setAge] = useState("");
   const [interest, setInterest] = useState("");
@@ -21,7 +20,6 @@ export default function BetaForm() {
 
   const validate = (): Errors => {
     const e: Errors = {};
-    if (!name.trim()) e.name = b.errors.name;
     if (!email.trim()) e.email = b.errors.email;
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
       e.email = b.errors.emailFormat;
@@ -41,7 +39,6 @@ export default function BetaForm() {
     setSubmitting(true);
     setServerError(null);
     const result = await submitWaitlist({
-      parent_name: name.trim(),
       email: email.trim().toLowerCase(),
       child_age: Number(age),
       interest: interest || undefined,
@@ -133,7 +130,6 @@ export default function BetaForm() {
               <SuccessState
                 onReset={() => {
                   setSubmitted(false);
-                  setName("");
                   setEmail("");
                   setAge("");
                   setInterest("");
@@ -149,21 +145,6 @@ export default function BetaForm() {
                 />
 
                 <form onSubmit={onSubmit} className="mt-7 space-y-4" noValidate>
-                  <Field
-                    label={b.fields.name}
-                    icon={<User className="h-4 w-4" />}
-                    error={errors.name}
-                  >
-                    <input
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder={b.fields.namePh}
-                      autoComplete="name"
-                      className="w-full bg-transparent text-[15px] outline-none placeholder:text-ink-300"
-                    />
-                  </Field>
-
                   <Field
                     label={b.fields.email}
                     icon={<Mail className="h-4 w-4" />}

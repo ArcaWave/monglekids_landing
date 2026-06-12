@@ -1,22 +1,72 @@
-import { Sparkles, Brain, MessageCircle, Compass, Bot, Heart } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import SectionHeader from "./SectionHeader";
 import { useLang } from "../i18n/LanguageContext";
 
-const STYLES = [
-  { icon: Sparkles, accent: "from-grape-200 to-rose-100", text: "text-grape-700" },
-  { icon: Brain, accent: "from-sky-200 to-grape-100", text: "text-sky-500" },
-  { icon: MessageCircle, accent: "from-rose-200 to-peach-100", text: "text-rose-500" },
-  { icon: Compass, accent: "from-mint-200 to-sky-100", text: "text-mint-500" },
-  { icon: Bot, accent: "from-peach-200 to-sun-100", text: "text-peach-500" },
-  { icon: Heart, accent: "from-sun-100 to-rose-100", text: "text-sun-500" },
+/**
+ * Framework — the six abilities as one circulating system.
+ *
+ * Six soft 3D icons (Fluent Emoji, MIT) sit on a ring, joined edge-to-edge.
+ * A gentle pulse travels around the circle: each ability lights up in turn
+ * and passes the energy to the next — growth that loops, not a checklist.
+ * No mascot in the middle; the ring itself is the story.
+ */
+
+/** Per-node icon + halo tint. Icons live in /public/icons (Fluent 3D). */
+const NODES = [
+  { src: "/icons/creativity.png", halo: "bg-rose-100" },
+  { src: "/icons/interaction.png", halo: "bg-sky-100" },
+  { src: "/icons/social.png", halo: "bg-sun-100" },
+  { src: "/icons/emotion.png", halo: "bg-rose-100" },
+  { src: "/icons/expression.png", halo: "bg-grape-100" },
+  { src: "/icons/thinking.png", halo: "bg-sun-100" },
 ];
+
+const CENTER = 50;
+const RADIUS = 36; // % of the stage
+
+const POS = Array.from({ length: 6 }, (_, i) => {
+  const a = ((i * 60 - 90) * Math.PI) / 180;
+  return {
+    x: CENTER + RADIUS * Math.cos(a),
+    y: CENTER + RADIUS * Math.sin(a),
+  };
+});
 
 export default function Framework() {
   const { t } = useLang();
   const f = t.framework;
+
+  const [active, setActive] = useState(0);
+  const [running, setRunning] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setActive(-1);
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => setRunning(entry.isIntersecting),
+      { threshold: 0.3 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!running) return;
+    const id = window.setInterval(() => setActive((v) => (v + 1) % 6), 1500);
+    return () => window.clearInterval(id);
+  }, [running]);
+
   return (
-    <section className="relative py-20 md:py-28">
-      <div className="container-page">
+    <section ref={sectionRef} className="relative overflow-hidden py-20 md:py-28">
+      <div className="blob -left-24 top-32 h-72 w-72 bg-sun-100" />
+      <div className="blob -right-24 bottom-16 h-72 w-72 bg-sky-100" />
+
+      <div className="container-page relative">
         <SectionHeader
           eyebrow={f.eyebrow}
           title={
@@ -27,29 +77,93 @@ export default function Framework() {
           }
         />
 
-        <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-6">
-          {f.pillars.map((p, i) => {
-            const s = STYLES[i];
-            const Icon = s.icon;
+        {/* The ring */}
+        <div className="relative mx-auto mt-10 aspect-square w-full max-w-[540px] md:mt-14">
+          <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full" aria-hidden>
+            {/* Soft connecting ring */}
+            <circle
+              cx={CENTER}
+              cy={CENTER}
+              r={RADIUS}
+              fill="none"
+              stroke="#eccdbb"
+              strokeWidth={1.2}
+              vectorEffect="non-scaling-stroke"
+              opacity={0.5}
+            />
+            {/* Edge currently carrying the pulse: active → next */}
+            {active >= 0 &&
+              (() => {
+                const p = POS[active];
+                const q = POS[(active + 1) % 6];
+                return (
+                  <line
+                    x1={p.x} y1={p.y} x2={q.x} y2={q.y}
+                    stroke="#e3c264"
+                    strokeWidth={2.5}
+                    strokeDasharray="4 6"
+                    strokeLinecap="round"
+                    vectorEffect="non-scaling-stroke"
+                    className="animate-flow"
+                  />
+                );
+              })()}
+          </svg>
+
+          {NODES.map((n, i) => {
+            const hot = i === active;
+            const next = active >= 0 && i === (active + 1) % 6;
+            const p = f.pillars[i];
             return (
               <div
                 key={p.ko}
-                className="group relative flex flex-col items-start gap-3 overflow-hidden rounded-3xl bg-white p-5 ring-1 ring-grape-100/70 transition hover:-translate-y-0.5 clay-shadow-sm"
+                className="absolute z-10 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center"
+                style={{ left: `${POS[i].x}%`, top: `${POS[i].y}%` }}
               >
-                <span
-                  className={`inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br ${s.accent} ${s.text} clay-shadow-sm`}
-                >
-                  <Icon className="h-5 w-5" />
+                <span className="relative flex items-center justify-center">
+                  {/* Soft halo behind the icon disc */}
+                  <span
+                    className={[
+                      "absolute rounded-full blur-md transition-all duration-500",
+                      n.halo,
+                      hot ? "h-20 w-20 opacity-90 sm:h-24 sm:w-24" : "h-12 w-12 opacity-0",
+                    ].join(" ")}
+                  />
+                  <span
+                    className={[
+                      "relative flex items-center justify-center rounded-full bg-white transition-all duration-500",
+                      hot
+                        ? "h-[72px] w-[72px] ring-4 ring-sun-300/70 clay-shadow sm:h-20 sm:w-20"
+                        : next
+                          ? "h-16 w-16 ring-2 ring-sun-100 clay-shadow-sm sm:h-[72px] sm:w-[72px]"
+                          : "h-16 w-16 ring-2 ring-cream-100 clay-shadow-sm sm:h-[72px] sm:w-[72px]",
+                    ].join(" ")}
+                  >
+                    <img
+                      src={n.src}
+                      alt=""
+                      aria-hidden
+                      draggable={false}
+                      className={[
+                        "select-none object-contain transition-transform duration-500",
+                        hot ? "h-11 w-11 sm:h-12 sm:w-12" : "h-9 w-9 sm:h-10 sm:w-10",
+                      ].join(" ")}
+                    />
+                  </span>
                 </span>
-                <div>
-                  <p className="text-[14.5px] font-semibold leading-tight text-ink-900">
-                    {p.ko}
-                  </p>
-                  <p className="font-display mt-0.5 text-[11px] font-medium uppercase tracking-[0.16em] text-ink-400">
-                    {p.en}
-                  </p>
-                </div>
-                <span className="pointer-events-none absolute -bottom-8 -right-8 h-24 w-24 rounded-full bg-grape-100/60 blur-2xl transition group-hover:bg-grape-200/60" />
+                <span
+                  className={[
+                    "mt-2 rounded-full px-2.5 py-1 text-[12px] font-semibold transition-all duration-500 sm:text-[13px]",
+                    hot
+                      ? "bg-sun-100 text-ink-900 ring-1 ring-sun-300"
+                      : "bg-white/85 text-ink-800 ring-1 ring-grape-100/70",
+                  ].join(" ")}
+                >
+                  {p.ko}
+                </span>
+                <span className="font-display mt-1 hidden text-[9.5px] font-medium uppercase tracking-[0.14em] text-ink-400 sm:block">
+                  {p.en}
+                </span>
               </div>
             );
           })}

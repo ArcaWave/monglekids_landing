@@ -11,7 +11,7 @@ const STYLES = [
 ];
 
 export default function ParentValue() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const p = t.parent;
   const scrollTo = useScrollToSection();
   return (
@@ -35,6 +35,30 @@ export default function ParentValue() {
             </p>
             <p className="mt-3 text-[12.5px] font-semibold text-ink-400">
               {p.quoteBy}
+            </p>
+          </div>
+
+          {/* A small peek at the real parent report, tucked in like a phone on the table */}
+          <div className="mt-6 flex items-end gap-4">
+            <figure className="w-[164px] flex-none rotate-[-2deg] sm:w-[180px]">
+              <div className="overflow-hidden rounded-[22px] ring-4 ring-white clay-shadow">
+                <img
+                  src="/media/parent-report.webp"
+                  alt={lang === "ko" ? "몽글키즈 부모 리포트 실제 화면 — 오늘의 한 줄, 활동 타임라인, 핵심 역량" : "MongleKids parent report — today's one-liner, activity timeline, core competencies"}
+                  loading="lazy"
+                  decoding="async"
+                  draggable={false}
+                  className="block w-full select-none"
+                />
+              </div>
+              <figcaption className="font-display mt-2.5 text-center text-[10.5px] font-semibold uppercase tracking-[0.14em] text-ink-400">
+                {lang === "ko" ? "실제 리포트 화면" : "Actual report screen"}
+              </figcaption>
+            </figure>
+            <p className="mb-6 hidden text-[13px] leading-[1.7] text-ink-500 sm:block">
+              {lang === "ko"
+                ? "오늘 아이가 어떤 생각을 했는지, 한 줄로 먼저 만나요."
+                : "Meet your child's day in a single line, first."}
             </p>
           </div>
 

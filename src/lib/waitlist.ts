@@ -12,7 +12,6 @@
  */
 
 export type WaitlistEntry = {
-  parent_name: string;
   email: string;
   child_age: number;
   interest?: string;

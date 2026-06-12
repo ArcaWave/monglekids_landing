@@ -293,6 +293,16 @@
   50% { opacity: 0.95; transform: scale(1.04); }
 }
 
+/* Energy flowing along a dashed SVG stroke (Framework spokes) */
+@keyframes flow {
+  to { stroke-dashoffset: -20; }
+}
+
+/* Very slow decorative rotation (Framework orbit ring) */
+@keyframes spin-slower {
+  to { transform: rotate(360deg); }
+}
+
 .animate-float-slow {
   animation: float-slow 11s ease-in-out infinite;
 }
@@ -308,13 +318,21 @@
 .animate-pulse-soft {
   animation: pulse-soft 4.2s ease-in-out infinite;
 }
+.animate-flow {
+  animation: flow 1.1s linear infinite;
+}
+.animate-spin-slower {
+  animation: spin-slower 70s linear infinite;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .animate-float-slow,
   .animate-float-slower,
   .animate-drift,
   .animate-drift-reverse,
-  .animate-pulse-soft {
+  .animate-pulse-soft,
+  .animate-flow,
+  .animate-spin-slower {
     animation: none;
   }
   html {
