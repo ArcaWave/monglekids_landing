@@ -51,7 +51,7 @@ export function websiteSchema() {
     name: SITE.brandKo,
     alternateName: SITE.brandEn,
     description:
-      "AI 시대의 5–9세 아이를 위한 창의 성장 동반자. 몽글키즈는 아이가 AI와 함께 상상하고, 만들고, 표현하며 자라는 STEAM 교육 플랫폼입니다.",
+      "AI 캐릭터와 함께 소통하는 5–9세 창의융합교육 서비스. 몽글키즈는 아이가 말하고, 만들고, 표현하는 놀이로 창의성 · 사고력 · 표현력 · 사회성 · 정서를 키우는 플랫폼입니다.",
     inLanguage: ["ko-KR", "en-US"],
     publisher: { "@id": `${SITE.url}/#organization` },
   };
@@ -86,7 +86,7 @@ export function educationalAppSchema() {
     inLanguage: ["ko-KR", "en-US"],
     publisher: { "@id": `${SITE.url}/#organization` },
     description:
-      "몽글키즈(MongleKids)는 5–9세 아이를 위한 AI 창의 성장 동반자입니다. 아이가 AI와 함께 질문하고, 상상하고, 직접 만들며 STEAM 역량을 키울 수 있도록 설계된 매일의 미션 기반 교육 경험을 제공합니다.",
+      "몽글키즈(MongleKids)는 AI 캐릭터와 함께 소통하는 5–9세 창의융합교육 서비스입니다. 매일의 놀이 미션 속에서 아이가 말하고, 만들고, 표현하며 창의성 · 사고력 · 표현력 · 사회성 · 정서를 키울 수 있도록 설계되었습니다.",
   };
 }
 

@@ -1,6 +1,7 @@
 import { ArrowRight, Sparkles, Play } from "lucide-react";
 import HeroMock from "./HeroMock";
 import Cloud from "./Cloud";
+import CloudScape from "./CloudScape";
 import { useLang, withBreaks } from "../i18n/LanguageContext";
 import { useScrollToSection } from "../lib/useScrollToSection";
 
@@ -16,16 +17,16 @@ export default function Hero() {
         className="animate-drift cloud-shadow-sm pointer-events-none absolute -left-6 top-28 hidden w-[140px] sm:block"
         aria-hidden
       >
-        <Cloud fill="#FFFFFF" highlight="#FBFAFF" className="block w-full" />
+        <Cloud fill="#FFFFFF" highlight="#FFFDF7" className="block w-full" />
       </span>
       <span
         className="animate-drift-reverse cloud-shadow-sm pointer-events-none absolute right-8 top-10 hidden w-[110px] md:block"
         aria-hidden
       >
-        <Cloud fill="#FFE7DC" highlight="#FFF6EE" className="block w-full" />
+        <Cloud fill="#FBE8D8" highlight="#FFF6EE" className="block w-full" />
       </span>
 
-      <div className="container-page relative z-10 grid grid-cols-1 items-center gap-14 pb-24 md:gap-12 md:pb-32 lg:grid-cols-12 lg:gap-10">
+      <div className="container-page relative z-10 grid grid-cols-1 items-center gap-14 pb-12 md:gap-12 md:pb-16 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-6">
           <div className="font-display inline-flex items-center gap-2 rounded-full bg-white/85 px-3.5 py-1.5 text-[12px] font-semibold tracking-wide text-grape-700 ring-1 ring-grape-100 backdrop-blur clay-shadow-sm">
             <Sparkles className="h-3.5 w-3.5" />
@@ -93,6 +94,9 @@ export default function Hero() {
           <HeroMock />
         </div>
       </div>
+
+      {/* Layered paper-cut cloud wall — the play-café mural moment */}
+      <CloudScape className="relative z-0 -mb-px" />
     </section>
   );
 }

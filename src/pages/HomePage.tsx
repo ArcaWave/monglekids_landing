@@ -1,6 +1,7 @@
 import Header from "../components/Header";
 import Hero from "../components/Hero";
 import Problem from "../components/Problem";
+import EnergyGap from "../components/EnergyGap";
 import Shift from "../components/Shift";
 import Solution from "../components/Solution";
 import Experience from "../components/Experience";
@@ -27,15 +28,15 @@ export default function HomePage() {
     lang === "ko"
       ? {
           title:
-            "몽글키즈 · AI 시대의 5–9세 창의 성장 동반자 | STEAM · AI 교육 앱",
+            "몽글키즈 · AI 캐릭터와 소통하는 창의융합교육 | 5–9세 놀이 학습",
           description:
-            "몽글키즈는 5–9세 아이를 위한 AI 창의 성장 동반자입니다. 매일의 작은 미션으로 창의력 · 질문력 · 표현력 · 자기주도성을 키우는 STEAM · AI 교육 경험. 부모를 위한 성장 리포트 제공.",
+            "몽글키즈는 AI 캐릭터와 함께 소통하는 5–9세 창의융합교육 서비스입니다. 말하고, 만들고, 표현하는 놀이로 창의성 · 사고력 · 표현력 · 사회성 · 정서를 키워요. 부모를 위한 성장 리포트 제공.",
         }
       : {
           title:
-            "MongleKids · The AI Creative Growth Companion for Kids 5–9 | STEAM, AI Education",
+            "MongleKids · Creative Learning with AI Characters for Ages 5–9 | Play-based Education",
           description:
-            "MongleKids is an AI creative growth companion for kids aged 5–9. Daily mission-based STEAM and AI learning that grows creativity, curiosity, expression, and self-direction — with reports parents can trust.",
+            "MongleKids is a play-based creative learning service for ages 5–9. Kids talk, make, and express with AI characters — growing creativity, thinking, expression, and social-emotional skills. With reports parents can trust.",
         };
 
   const jsonLd = [
@@ -62,6 +63,7 @@ export default function HomePage() {
       <main>
         <Hero />
         <Problem />
+        <EnergyGap />
         <Shift />
         <Solution />
         <Experience />

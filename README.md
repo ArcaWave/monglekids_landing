@@ -1,17 +1,37 @@
 # MongleKids · 몽글키즈
 
-AI creative growth companion for kids 5–9.
+Play-based creative learning with AI characters, for kids 5–9.
 Operated by Arcawave, Inc. — https://www.monglekids.com
 
 ## Stack
 
 - **Vite + React 18 + TypeScript** — landing site
-- **Tailwind CSS v4** — styling (clay-cloud pastel system)
+- **Tailwind CSS v4** — styling (warm play-café pastel system)
 - **react-router-dom v6** — client routing
 - **vite-react-ssg** — static prerender at build time
 - **react-helmet-async** — per-page `<head>` (title / meta / JSON-LD)
 - **Vercel** — hosting (SPA fallback via `vercel.json`)
-- **Supabase** — app DB (used by the mobile app, not the landing yet)
+- **Supabase** — waitlist storage (and the mobile app's DB)
+
+## Waitlist setup (one-time)
+
+The beta form on the landing page writes to a Supabase table.
+
+1. Open the Supabase project → **SQL Editor** → paste & run
+   [`supabase/waitlist.sql`](supabase/waitlist.sql).
+   This creates `public.waitlist` with an **INSERT-only RLS policy** for the
+   anon role (the public key can add a signup but never read the list).
+2. Dashboard → **Project Settings → API** → copy:
+   - Project URL → `VITE_SUPABASE_URL`
+   - anon public key → `VITE_SUPABASE_ANON_KEY`
+3. Local dev: copy `.env.example` to `.env` and fill both values.
+   Production: Vercel → Project → **Settings → Environment Variables** →
+   add both, then redeploy.
+4. Read signups in Supabase **Table Editor → waitlist** (or export CSV).
+
+If the env vars are missing the form still works in **demo mode** — it shows
+the success state but logs a console warning and stores nothing. Duplicate
+emails return HTTP 409 and are treated as "already on the list" (success UX).
 
 ## Scripts
 
@@ -58,8 +78,9 @@ on the next `npm run build`.
 | `public/robots.txt`                    | Crawler directives + sitemap link                  |
 | `public/sitemap.xml`                   | Static sitemap. Update when adding routes.         |
 | `public/llms.txt`                      | Brand summary for LLM crawlers (experimental)      |
-| `public/og-image.svg`                  | 1200×630 OG card. **Convert to PNG before launch** for Facebook / Twitter / KakaoTalk compatibility (Discord/Slack handle SVG fine). |
-| `public/og-logo.svg`                   | 512×512 square logo (used by JSON-LD `logo`)       |
+| `public/og-image.png`                  | 1200×630 OG card with the real brand lockup (KakaoTalk/FB/X-safe) |
+| `public/brand/logo.png`                | Horizontal brand lockup (header logo, 800w)        |
+| `public/brand/mascot.png`              | Square mascot (favicons, JSON-LD `logo`, hero accent) |
 
 ### Search console registration (do once after going live)
 
@@ -117,8 +138,8 @@ verification values there — every page picks them up.
 
 ## TODO before going public
 
-- [ ] Convert `public/og-image.svg` → `public/og-image.png` (1200×630) and
-      flip `SITE.ogImage` back to `.png` in `src/seo/site.ts`.
+- [x] ~~Convert OG image to PNG~~ — done; `public/og-image.png` is generated
+      from the real brand lockup.
 - [ ] Replace placeholder `sameAs` URLs in `src/seo/site.ts` with real
       profiles (Instagram, X, LinkedIn, etc.) once they exist.
 - [ ] Update placeholder office address in `src/seo/site.ts` to the real

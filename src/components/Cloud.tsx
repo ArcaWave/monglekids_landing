@@ -71,10 +71,10 @@ export default function Cloud({
           {/* Eyes */}
           {mood === "wink" ? (
             <>
-              <circle cx="100" cy="78" r="4.6" fill="#2A2440" />
+              <circle cx="100" cy="78" r="4.6" fill="#4A3B2F" />
               <path
                 d="M138 78 Q146 82 154 78"
-                stroke="#2A2440"
+                stroke="#4A3B2F"
                 strokeWidth="3.6"
                 strokeLinecap="round"
                 fill="none"
@@ -82,22 +82,22 @@ export default function Cloud({
             </>
           ) : mood === "wonder" ? (
             <>
-              <circle cx="100" cy="78" r="5.2" fill="#2A2440" />
-              <circle cx="146" cy="78" r="5.2" fill="#2A2440" />
+              <circle cx="100" cy="78" r="5.2" fill="#4A3B2F" />
+              <circle cx="146" cy="78" r="5.2" fill="#4A3B2F" />
               <circle cx="101.6" cy="76.4" r="1.4" fill="#FFFFFF" />
               <circle cx="147.6" cy="76.4" r="1.4" fill="#FFFFFF" />
             </>
           ) : (
             <>
-              <circle cx="100" cy="80" r="4.6" fill="#2A2440" />
-              <circle cx="146" cy="80" r="4.6" fill="#2A2440" />
+              <circle cx="100" cy="80" r="4.6" fill="#4A3B2F" />
+              <circle cx="146" cy="80" r="4.6" fill="#4A3B2F" />
             </>
           )}
 
           {/* Smile */}
           <path
             d="M112 100 Q123 110 134 100"
-            stroke="#2A2440"
+            stroke="#4A3B2F"
             strokeWidth="3.6"
             strokeLinecap="round"
             fill="none"
@@ -123,14 +123,14 @@ export function CloudField({
   const palettes = {
     warm: [
       { fill: "#FFFFFF", top: "8%", left: "4%", w: 240, anim: "animate-drift" },
-      { fill: "#FFE7DC", top: "30%", left: "78%", w: 200, anim: "animate-drift-reverse" },
-      { fill: "#EBE4FF", top: "62%", left: "10%", w: 180, anim: "animate-drift" },
+      { fill: "#FBE8D8", top: "30%", left: "78%", w: 200, anim: "animate-drift-reverse" },
+      { fill: "#F0DCCB", top: "62%", left: "10%", w: 180, anim: "animate-drift" },
       { fill: "#FFE1E8", top: "82%", left: "68%", w: 220, anim: "animate-drift-reverse" },
     ],
     cool: [
       { fill: "#FFFFFF", top: "10%", left: "6%", w: 230, anim: "animate-drift" },
-      { fill: "#DFEEFD", top: "22%", left: "76%", w: 210, anim: "animate-drift-reverse" },
-      { fill: "#EBE4FF", top: "68%", left: "12%", w: 180, anim: "animate-drift" },
+      { fill: "#DCEAED", top: "22%", left: "76%", w: 210, anim: "animate-drift-reverse" },
+      { fill: "#F0DCCB", top: "68%", left: "12%", w: 180, anim: "animate-drift" },
       { fill: "#DDF5E8", top: "78%", left: "70%", w: 200, anim: "animate-drift-reverse" },
     ],
     twilight: [

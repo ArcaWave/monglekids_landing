@@ -1,5 +1,6 @@
 import { ArrowRight, Sparkles } from "lucide-react";
 import Cloud from "./Cloud";
+import CloudScape from "./CloudScape";
 import { useLang, withBreaks } from "../i18n/LanguageContext";
 import { useScrollToSection } from "../lib/useScrollToSection";
 
@@ -11,27 +12,33 @@ export default function FinalCTA() {
     <section className="relative px-5 pb-20 md:pb-28">
       <div className="container-page">
         <div
-          className="relative overflow-hidden rounded-[36px] p-10 text-center clay-shadow md:p-16"
+          className="relative overflow-hidden rounded-[36px] p-10 pb-32 text-center clay-shadow md:p-16 md:pb-44"
           style={{
             backgroundImage:
-              "linear-gradient(135deg, #e9defb 0%, #f7d7e3 50%, #ffe0d3 100%)",
+              "linear-gradient(135deg, #f7ead2 0%, #f4d8cb 50%, #dce9ec 100%)",
           }}
         >
-          <div className="blob -left-10 -top-10 h-72 w-72 bg-grape-200/70" />
+          <div className="blob -left-10 -top-10 h-72 w-72 bg-sun-100/70" />
           <div className="blob -right-10 bottom-[-40px] h-80 w-80 bg-rose-200/70" />
           <div className="blob left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 bg-peach-100/60" />
+
+          {/* Paper-cut cloud wall along the bottom of the card */}
+          <CloudScape
+            className="absolute inset-x-0 bottom-0"
+            frontFill="#fdfaf2"
+          />
 
           <span
             className="animate-drift cloud-shadow-sm pointer-events-none absolute -left-6 top-8 hidden w-[150px] sm:block"
             aria-hidden
           >
-            <Cloud fill="#FFFFFF" highlight="#FBFAFF" className="block w-full" />
+            <Cloud fill="#FFFFFF" highlight="#FFFDF7" className="block w-full" />
           </span>
           <span
-            className="animate-drift-reverse cloud-shadow-sm pointer-events-none absolute -right-4 bottom-8 hidden w-[140px] sm:block"
+            className="animate-drift-reverse cloud-shadow-sm pointer-events-none absolute -right-4 top-16 hidden w-[140px] sm:block"
             aria-hidden
           >
-            <Cloud fill="rgba(255,225,232,0.92)" highlight="#FFF1F4" className="block w-full" />
+            <Cloud fill="rgba(250,228,222,0.92)" highlight="#FFF6F1" className="block w-full" />
           </span>
 
           <div className="pointer-events-none absolute inset-0">

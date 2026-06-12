@@ -1,37 +1,19 @@
-import Cloud from "./Cloud";
-import { useLang } from "../i18n/LanguageContext";
-
+/**
+ * Brand logo — the real clay lockup (cloud mascot + 몽글키즈).
+ * Served from /public/brand/logo.png (800w, retina-ready for ~h-10 display).
+ */
 type Props = {
-  size?: number;
+  /** Tailwind height class; width follows the image's aspect ratio. */
+  className?: string;
 };
 
-export default function Logo({ size = 44 }: Props) {
-  const { t } = useLang();
+export default function Logo({ className = "h-9 md:h-10" }: Props) {
   return (
-    <div className="flex items-center gap-2.5">
-      <span
-        className="relative inline-flex items-center justify-center cloud-shadow-sm"
-        style={{ width: size, height: size * 0.78 }}
-        aria-hidden
-      >
-        <Cloud
-          fill="#FFFFFF"
-          rim="#E7DEFA"
-          highlight="#FBFAFF"
-          face
-          mood="happy"
-          className="block h-full w-full"
-        />
-        <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-rose-300 ring-2 ring-cream-50" />
-      </span>
-      <div className="flex flex-col leading-tight">
-        <span className="text-[15px] font-bold tracking-tight text-ink-900">
-          {t.logo.primary}
-        </span>
-        <span className="font-display text-[10px] font-medium uppercase tracking-[0.18em] text-ink-400">
-          {t.logo.secondary}
-        </span>
-      </div>
-    </div>
+    <img
+      src="/brand/logo.png"
+      alt="몽글키즈 MongleKids"
+      className={`w-auto select-none ${className}`}
+      draggable={false}
+    />
   );
 }

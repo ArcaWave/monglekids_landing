@@ -19,7 +19,7 @@ export default function Experience() {
       className="relative overflow-hidden py-20 md:py-28"
       style={{
         backgroundImage:
-          "linear-gradient(180deg, #d6cdf1 0%, #e1cee2 55%, #f6d3d3 100%)",
+          "linear-gradient(180deg, #f0dfc8 0%, #f2d5c6 55%, #efe2d0 100%)",
       }}
     >
       <span
@@ -164,13 +164,11 @@ function ChatBubble({
         aria-hidden
       >
         {isAi ? (
-          <Cloud
-            fill="#FFFFFF"
-            rim="#EBE4FF"
-            highlight="#FBFAFF"
-            face
-            mood="happy"
-            className="absolute inset-0 h-full w-full"
+          <img
+            src="/brand/moongi.png"
+            alt=""
+            draggable={false}
+            className="absolute inset-0 h-full w-full select-none object-contain"
           />
         ) : (
           <span className="text-base">🧒</span>

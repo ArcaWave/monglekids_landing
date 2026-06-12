@@ -1,75 +1,97 @@
 @import "tailwindcss";
 
+/* 여기어때 잘난체 — single-weight display face for titles (same as the app). */
+@font-face {
+  font-family: "yg-jalnan";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
-  /* Body sans — Pretendard with friendlier stylistic sets enabled in body{} */
+  /* Body sans — 나눔스퀘어라운드 (same as the app), loaded via Naver CDN. */
   --font-sans:
-    "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont,
+    "NanumSquareRound", -apple-system, BlinkMacSystemFont,
     "Apple SD Gothic Neo", "Segoe UI", system-ui, sans-serif;
-  /* Display — rounded geometric sans for English / numerals only.
-     Falls through to Pretendard for Korean so the page never feels mismatched. */
+  /* Title display — 잘난체. Falls back to the round body face. */
+  --font-title:
+    "yg-jalnan", "NanumSquareRound", -apple-system, "Apple SD Gothic Neo",
+    system-ui, sans-serif;
+  /* Latin display — rounded geometric sans for English labels / numerals.
+     Falls through to NanumSquareRound for Korean. */
   --font-display:
-    "Quicksand", "Pretendard Variable", "Pretendard", -apple-system,
-    "Apple SD Gothic Neo", system-ui, sans-serif;
+    "Quicksand", "NanumSquareRound", -apple-system, "Apple SD Gothic Neo",
+    system-ui, sans-serif;
 
-  /* Page surface — soft pastel sky cream */
-  --color-cream-50: #fbfaff;
-  --color-cream-100: #f3eefb;
-  --color-cream-200: #e7defa;
+  /* ============================================================
+     Warm play-café palette.
+     Token NAMES are kept from the earlier lavender theme so no
+     component changes are needed — only the VALUES are remapped:
+       grape = warm clay / terracotta (brand & CTA)
+       cream = warm ivory (page surface)
+       rose  = dusty pink     peach = warm apricot
+       sun   = butter yellow  sky   = powder blue   mint = soft sage
+     ============================================================ */
 
-  /* Ink — rebalanced for stable, readable contrast on pastel surfaces.
-     Headings use 900, paragraphs use 600 (the new most-used body tone),
-     captions / muted use 500/400. */
-  --color-ink-900: #221c3d;
-  --color-ink-800: #322b53;
-  --color-ink-700: #4d456e;
-  --color-ink-600: #65597e;
-  --color-ink-500: #7b6f95;
-  --color-ink-400: #a299bc;
-  --color-ink-300: #cdc6dd;
+  /* Page surface — warm ivory, like cream-painted walls */
+  --color-cream-50: #fcf7ec;
+  --color-cream-100: #f7edda;
+  --color-cream-200: #f0e0c4;
 
-  /* "grape" — pastel lavender (clay cloud accent) */
-  --color-grape-50: #f4f1ff;
-  --color-grape-100: #ebe4ff;
-  --color-grape-200: #d8ccff;
-  --color-grape-400: #b9abf3;
-  --color-grape-500: #a594e6;
-  --color-grape-600: #8e7dd4;
-  --color-grape-700: #7868bc;
-  --color-grape-800: #6453a8;
+  /* Ink — warm brown-gray for text. Headings 900, body 600–700. */
+  --color-ink-900: #44382c;
+  --color-ink-800: #54473a;
+  --color-ink-700: #675849;
+  --color-ink-600: #79695a;
+  --color-ink-500: #8e7e6d;
+  --color-ink-400: #b0a18e;
+  --color-ink-300: #d6cbb8;
 
-  /* Soft peach — clay sunset bump */
-  --color-peach-100: #ffe7dc;
-  --color-peach-200: #ffd2bd;
-  --color-peach-300: #ffbb9b;
-  --color-peach-400: #ffa37c;
-  --color-peach-500: #fb8a60;
+  /* "grape" — now warm clay/terracotta (primary brand + CTA) */
+  --color-grape-50: #faf0e9;
+  --color-grape-100: #f5e2d6;
+  --color-grape-200: #eccdbb;
+  --color-grape-400: #dba58a;
+  --color-grape-500: #d09375;
+  --color-grape-600: #c07f60;
+  --color-grape-700: #a6694c;
+  --color-grape-800: #8c5538;
 
-  /* Pastel mint */
-  --color-mint-100: #ddf5e8;
-  --color-mint-200: #c0ecd3;
-  --color-mint-300: #a4e1bf;
-  --color-mint-400: #82d2a3;
-  --color-mint-500: #66c08c;
+  /* Warm apricot */
+  --color-peach-100: #fbe8d8;
+  --color-peach-200: #f7d7bc;
+  --color-peach-300: #f2c49e;
+  --color-peach-400: #ecb083;
+  --color-peach-500: #e29a68;
 
-  /* Butter sun */
-  --color-sun-100: #fff2cc;
-  --color-sun-300: #fcdb81;
-  --color-sun-500: #f4bc52;
+  /* Soft sage */
+  --color-mint-100: #e4eedc;
+  --color-mint-200: #d2e3c8;
+  --color-mint-300: #bcd5af;
+  --color-mint-400: #a3c394;
+  --color-mint-500: #87ac77;
 
-  /* Blush rose */
-  --color-rose-100: #ffe1e8;
-  --color-rose-200: #ffccd6;
-  --color-rose-300: #ffb1c1;
-  --color-rose-400: #fa9bae;
-  --color-rose-500: #f58fa4;
+  /* Butter yellow */
+  --color-sun-100: #faefc9;
+  --color-sun-300: #f2dd9b;
+  --color-sun-500: #e3c264;
 
-  /* Pastel sky */
-  --color-sky-50: #eff6ff;
-  --color-sky-100: #dfeefd;
-  --color-sky-200: #c6e0fa;
-  --color-sky-300: #a5cff7;
-  --color-sky-400: #82bdf2;
-  --color-sky-500: #6aaeec;
+  /* Dusty pink */
+  --color-rose-100: #fae4de;
+  --color-rose-200: #f5d2ca;
+  --color-rose-300: #eebbb0;
+  --color-rose-400: #e5a496;
+  --color-rose-500: #da8d7d;
+
+  /* Powder blue */
+  --color-sky-50: #f0f6f7;
+  --color-sky-100: #e2eef0;
+  --color-sky-200: #cde2e6;
+  --color-sky-300: #b3d3d9;
+  --color-sky-400: #97c2ca;
+  --color-sky-500: #7fb1bb;
 }
 
 @layer base {
@@ -87,33 +109,35 @@
     background-image:
       radial-gradient(
         1100px 520px at 80% -10%,
-        rgba(255, 209, 220, 0.4),
+        rgba(245, 210, 202, 0.42),
         transparent 60%
       ),
       radial-gradient(
         900px 480px at -10% 0%,
-        rgba(216, 204, 255, 0.42),
+        rgba(247, 233, 196, 0.5),
         transparent 60%
       ),
       radial-gradient(
         800px 420px at 50% 110%,
-        rgba(198, 224, 250, 0.36),
+        rgba(205, 226, 230, 0.4),
         transparent 60%
       );
     background-attachment: fixed;
-    /* Pretendard's friendlier stylistic alternates for a softer, rounder feel
-       (single-storey g, rounded a, alt numerals) — combined with kerning
-       and contextual alternates for delicate Korean rhythm. */
-    font-feature-settings: "ss01", "ss02", "ss03", "calt", "kern";
+    font-feature-settings: "calt", "kern";
     text-rendering: optimizeLegibility;
     letter-spacing: -0.005em;
     line-height: 1.6;
   }
 
   h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-title);
     color: var(--color-ink-900);
-    letter-spacing: -0.015em;
-    line-height: 1.25;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    /* 잘난체 is single-weight — never let the browser fake a bold on top
+       of it (Tailwind's font-bold/semibold classes would otherwise
+       trigger ugly synthesized strokes). */
+    font-synthesis: none;
   }
 
   /* Numbers feel more stable when tabular — for stat chips, percentages, age, etc. */
@@ -166,30 +190,30 @@
     z-index: 0;
   }
 
-  /* "Clay" depth — soft top highlight + diffused pastel shadow underneath. */
+  /* "Clay" depth — soft top highlight + diffused warm shadow underneath. */
   .clay-shadow {
     box-shadow:
       0 1px 0 rgba(255, 255, 255, 0.85) inset,
-      0 -2px 0 rgba(120, 104, 188, 0.05) inset,
-      0 12px 28px -14px rgba(120, 104, 188, 0.22),
-      0 4px 10px -4px rgba(165, 148, 230, 0.14);
+      0 -2px 0 rgba(166, 105, 76, 0.05) inset,
+      0 12px 28px -14px rgba(166, 105, 76, 0.2),
+      0 4px 10px -4px rgba(208, 147, 117, 0.14);
   }
 
   .clay-shadow-sm {
     box-shadow:
       0 1px 0 rgba(255, 255, 255, 0.75) inset,
-      0 6px 14px -8px rgba(120, 104, 188, 0.18),
-      0 2px 5px -2px rgba(165, 148, 230, 0.12);
+      0 6px 14px -8px rgba(166, 105, 76, 0.16),
+      0 2px 5px -2px rgba(208, 147, 117, 0.12);
   }
 
   .cloud-shadow {
-    filter: drop-shadow(0 14px 24px rgba(120, 104, 188, 0.18))
-      drop-shadow(0 3px 5px rgba(165, 148, 230, 0.12));
+    filter: drop-shadow(0 14px 24px rgba(166, 105, 76, 0.16))
+      drop-shadow(0 3px 5px rgba(208, 147, 117, 0.11));
   }
 
   .cloud-shadow-sm {
-    filter: drop-shadow(0 8px 14px rgba(120, 104, 188, 0.14))
-      drop-shadow(0 2px 3px rgba(165, 148, 230, 0.1));
+    filter: drop-shadow(0 8px 14px rgba(166, 105, 76, 0.13))
+      drop-shadow(0 2px 3px rgba(208, 147, 117, 0.09));
   }
 
   .clip-cloud {
@@ -203,8 +227,41 @@
 
   .ring-soft {
     box-shadow:
-      inset 0 0 0 1px rgba(185, 171, 243, 0.22),
-      0 8px 24px -10px rgba(142, 125, 212, 0.22);
+      inset 0 0 0 1px rgba(219, 165, 138, 0.24),
+      0 8px 24px -10px rgba(192, 127, 96, 0.2);
+  }
+
+  /* Clay-styled range slider (EnergyGap timeline) */
+  .mongle-range {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 10px;
+    border-radius: 9999px;
+    outline: none;
+    cursor: pointer;
+  }
+  .mongle-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 9999px;
+    background: #fff;
+    border: 3.5px solid #c07f60;
+    box-shadow: 0 3px 8px rgba(166, 105, 76, 0.3);
+    cursor: grab;
+  }
+  .mongle-range:active::-webkit-slider-thumb {
+    cursor: grabbing;
+  }
+  .mongle-range::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 9999px;
+    background: #fff;
+    border: 3.5px solid #c07f60;
+    box-shadow: 0 3px 8px rgba(166, 105, 76, 0.3);
+    cursor: grab;
   }
 }
 

@@ -38,13 +38,13 @@ export default function Solution() {
         className="animate-drift cloud-shadow-sm pointer-events-none absolute right-4 top-12 hidden w-[120px] opacity-90 md:block"
         aria-hidden
       >
-        <Cloud fill="#FFFFFF" highlight="#FBFAFF" className="block w-full" />
+        <Cloud fill="#FFFFFF" highlight="#FFFDF7" className="block w-full" />
       </span>
       <span
         className="animate-drift-reverse cloud-shadow-sm pointer-events-none absolute -left-4 bottom-20 hidden w-[140px] opacity-80 md:block"
         aria-hidden
       >
-        <Cloud fill="#DFEEFD" highlight="#F0F7FF" className="block w-full" />
+        <Cloud fill="#DCEAED" highlight="#F2F8F9" className="block w-full" />
       </span>
 
       <div className="container-page relative">

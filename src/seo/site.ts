@@ -10,18 +10,12 @@ export const SITE = {
   defaultLocale: "ko_KR",
   altLocale: "en_US",
   twitterHandle: "@monglekids",
-  themeColor: "#a594e6",
+  themeColor: "#d09375",
 
-  /**
-   * OG image — 1200×630, served from /public.
-   * NOTE: SVG works on Discord and modern Slack but is rejected by Facebook,
-   * Twitter, KakaoTalk. Run `npm run og:export` (or convert manually) to
-   * produce a PNG version once the design is final, then change this back
-   * to "/og-image.png".
-   */
-  ogImage: "/og-image.svg",
-  /** Square logo for JSON-LD `logo` field */
-  logo: "/og-logo.svg",
+  /** OG image — 1200×630 PNG with the real brand lockup (KakaoTalk/FB/X-safe). */
+  ogImage: "/og-image.png",
+  /** Square brand mascot for JSON-LD `logo` field */
+  logo: "/brand/mascot.png",
 
   contact: {
     email: "help@arcawave.xyz",

@@ -11,19 +11,21 @@ export default function HeroMock() {
       <div className="blob bg-rose-200 -right-12 top-24 h-60 w-60" />
       <div className="blob bg-sky-100 -bottom-12 left-10 h-56 w-56" />
 
-      <span
-        className="cloud-shadow-sm pointer-events-none absolute -left-2 -top-7 z-10 hidden w-[110px] sm:block"
+      {/* Real brand mascot peeking over the product card */}
+      <img
+        src="/brand/mascot.png"
+        alt=""
         aria-hidden
-      >
-        <Cloud fill="#FFFFFF" rim="#EBE4FF" highlight="#FBFAFF" className="block w-full" />
-      </span>
+        draggable={false}
+        className="animate-float-slow pointer-events-none absolute -left-4 -top-12 z-10 hidden w-[104px] select-none sm:block"
+      />
 
       <div className="relative rounded-[36px] bg-gradient-to-br from-white via-grape-50 to-rose-100 p-3 ring-1 ring-grape-100/80 clay-shadow">
         <div className="rounded-[28px] bg-gradient-to-b from-cream-50 to-white p-5 sm:p-6 ring-1 ring-grape-100/60">
           <div className="mb-5 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <span className="cloud-shadow-sm relative inline-flex h-10 w-10 items-center justify-center" aria-hidden>
-                <Cloud fill="#EBE4FF" highlight="#FBFAFF" className="absolute inset-0 h-full w-full" />
+                <Cloud fill="#F0DCCB" highlight="#FFFDF7" className="absolute inset-0 h-full w-full" />
                 <Sparkles className="relative h-4 w-4 text-grape-700" />
               </span>
               <div className="leading-tight">
@@ -40,7 +42,7 @@ export default function HeroMock() {
 
           <div className="flex items-start gap-2.5">
             <span className="cloud-shadow-sm relative inline-flex h-10 w-10 flex-none items-center justify-center" aria-hidden>
-              <Cloud fill="#FFFFFF" rim="#EBE4FF" highlight="#FBFAFF" face mood="happy" className="absolute inset-0 h-full w-full" />
+              <img src="/brand/moongi.png" alt="" draggable={false} className="h-full w-full select-none object-contain" />
             </span>
             <div className="rounded-2xl rounded-tl-md bg-grape-50 px-3.5 py-2.5 text-[13px] leading-snug text-ink-800 ring-1 ring-grape-100">
               {withBreaks(m.aiBubble1)}
@@ -61,7 +63,7 @@ export default function HeroMock() {
 
           <div className="mt-2.5 flex items-start gap-2.5">
             <span className="cloud-shadow-sm relative inline-flex h-10 w-10 flex-none items-center justify-center" aria-hidden>
-              <Cloud fill="#FFFFFF" rim="#EBE4FF" highlight="#FBFAFF" face mood="wonder" className="absolute inset-0 h-full w-full" />
+              <img src="/brand/moongi.png" alt="" draggable={false} className="h-full w-full select-none object-contain" />
             </span>
             <div className="rounded-2xl rounded-tl-md bg-white px-3.5 py-2.5 text-[13px] leading-snug text-ink-700 ring-1 ring-grape-100">
               {withBreaks(m.aiBubble2)}

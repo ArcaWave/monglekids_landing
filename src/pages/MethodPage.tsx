@@ -187,13 +187,13 @@ export default function MethodPage() {
             className="animate-drift cloud-shadow-sm pointer-events-none absolute -left-6 top-28 hidden w-[140px] sm:block"
             aria-hidden
           >
-            <Cloud fill="#FFFFFF" highlight="#FBFAFF" className="block w-full" />
+            <Cloud fill="#FFFFFF" highlight="#FFFDF7" className="block w-full" />
           </span>
           <span
             className="animate-drift-reverse cloud-shadow-sm pointer-events-none absolute right-8 top-10 hidden w-[110px] md:block"
             aria-hidden
           >
-            <Cloud fill="#FFE7DC" highlight="#FFF6EE" className="block w-full" />
+            <Cloud fill="#FBE8D8" highlight="#FFF6EE" className="block w-full" />
           </span>
 
           <div className="container-page relative">

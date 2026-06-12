@@ -3,11 +3,12 @@ import { ArrowRight, CheckCircle2, Sparkles, ChevronDown, Mail, User, Baby } fro
 import SectionHeader from "./SectionHeader";
 import Cloud from "./Cloud";
 import { useLang, withBreaks } from "../i18n/LanguageContext";
+import { submitWaitlist } from "../lib/waitlist";
 
 type Errors = Partial<Record<"name" | "email" | "age", string>>;
 
 export default function BetaForm() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const b = t.beta;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -15,6 +16,8 @@ export default function BetaForm() {
   const [interest, setInterest] = useState("");
   const [errors, setErrors] = useState<Errors>({});
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const validate = (): Errors => {
     const e: Errors = {};
@@ -28,11 +31,29 @@ export default function BetaForm() {
     return e;
   };
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (submitting) return;
     const v = validate();
     setErrors(v);
     if (Object.keys(v).length > 0) return;
+
+    setSubmitting(true);
+    setServerError(null);
+    const result = await submitWaitlist({
+      parent_name: name.trim(),
+      email: email.trim().toLowerCase(),
+      child_age: Number(age),
+      interest: interest || undefined,
+      lang,
+    });
+    setSubmitting(false);
+
+    if (result === "error") {
+      setServerError(b.errorGeneric);
+      return;
+    }
+    // "ok" | "duplicate" | "skipped" → they're on the list either way.
     setSubmitted(true);
   };
 
@@ -50,7 +71,7 @@ export default function BetaForm() {
             className="relative overflow-hidden p-8 text-ink-900 md:p-10 lg:col-span-5"
             style={{
               backgroundImage:
-                "linear-gradient(135deg, #ebe4ff 0%, #f7d7e3 55%, #ffe7dc 100%)",
+                "linear-gradient(135deg, #f8ecd4 0%, #f5d8cc 55%, #dceaed 100%)",
             }}
           >
             <div className="blob -left-10 -top-10 h-56 w-56 bg-white/60" />
@@ -60,13 +81,13 @@ export default function BetaForm() {
               className="animate-drift cloud-shadow-sm pointer-events-none absolute -left-3 top-3 w-[110px] opacity-90"
               aria-hidden
             >
-              <Cloud fill="#FFFFFF" highlight="#FBFAFF" className="block w-full" />
+              <Cloud fill="#FFFFFF" highlight="#FFFDF7" className="block w-full" />
             </span>
             <span
               className="animate-drift-reverse cloud-shadow-sm pointer-events-none absolute bottom-4 right-4 w-[130px] opacity-80"
               aria-hidden
             >
-              <Cloud fill="rgba(255,255,255,0.9)" highlight="#FBFAFF" className="block w-full" />
+              <Cloud fill="rgba(255,255,255,0.9)" highlight="#FFFDF7" className="block w-full" />
             </span>
 
             <div className="relative">
@@ -198,12 +219,24 @@ export default function BetaForm() {
                     </div>
                   </Field>
 
+                  {serverError && (
+                    <p
+                      role="alert"
+                      className="rounded-2xl bg-rose-100/70 px-4 py-3 text-center text-[13px] font-medium text-rose-500 ring-1 ring-rose-200"
+                    >
+                      {serverError}
+                    </p>
+                  )}
+
                   <button
                     type="submit"
-                    className="group mt-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-grape-700 px-5 py-4 text-[15px] font-semibold text-white transition hover:bg-grape-800 clay-shadow"
+                    disabled={submitting}
+                    className="group mt-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-grape-700 px-5 py-4 text-[15px] font-semibold text-white transition hover:bg-grape-800 disabled:cursor-not-allowed disabled:opacity-60 clay-shadow"
                   >
-                    {b.submit}
-                    <ArrowRight className="h-4.5 w-4.5 transition-transform group-hover:translate-x-1" />
+                    {submitting ? b.submitting : b.submit}
+                    {!submitting && (
+                      <ArrowRight className="h-4.5 w-4.5 transition-transform group-hover:translate-x-1" />
+                    )}
                   </button>
 
                   <p className="text-center text-[12px] leading-relaxed text-ink-400">
@@ -261,8 +294,8 @@ function SuccessState({ onReset }: { onReset: () => void }) {
         <span className="cloud-shadow relative inline-flex h-24 w-24 items-center justify-center">
           <Cloud
             fill="#FFFFFF"
-            rim="#EBE4FF"
-            highlight="#FBFAFF"
+            rim="#F0DCCB"
+            highlight="#FFFDF7"
             className="absolute inset-0 h-full w-full"
           />
           <CheckCircle2 className="relative h-9 w-9 text-grape-600" />

@@ -20,8 +20,10 @@ export default function Problem() {
             <>
               {t.problem.titlePre}
               <span className="text-grape-700">{t.problem.titleHighlight}</span>
+              {t.problem.titlePost}
             </>
           }
+          description={t.problem.description}
         />
 
         <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-5 lg:grid-cols-4">
