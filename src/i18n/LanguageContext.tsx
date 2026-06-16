@@ -20,16 +20,26 @@ const LanguageContext = createContext<Ctx | null>(null);
 
 const STORAGE_KEY = "mongle-lang";
 
+/**
+ * Default language is English. We only switch to Korean when there's a
+ * clear Korean signal:
+ *   1. the visitor previously chose a language (localStorage), or
+ *   2. their browser's languages include a Korean locale.
+ * Everything else — including the prerendered SSG HTML, which has no
+ * `window` — falls back to English.
+ */
 function detectInitialLang(): Lang {
-  if (typeof window === "undefined") return "ko";
+  if (typeof window === "undefined") return "en";
   try {
     const saved = window.localStorage.getItem(STORAGE_KEY);
     if (saved === "ko" || saved === "en") return saved;
   } catch {
     /* ignore */
   }
-  const nav = window.navigator?.language ?? "";
-  return nav.toLowerCase().startsWith("ko") ? "ko" : "en";
+  const nav = window.navigator;
+  const langs = [nav?.language, ...(nav?.languages ?? [])].filter(Boolean);
+  const prefersKorean = langs.some((l) => l!.toLowerCase().startsWith("ko"));
+  return prefersKorean ? "ko" : "en";
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {

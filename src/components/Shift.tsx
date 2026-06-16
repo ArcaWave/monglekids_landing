@@ -34,7 +34,7 @@ const STYLES = [
 
 /** Media slot per card: real clip, animated listening Moongi, or chat mock. */
 type Media =
-  | { kind: "clip"; src: string; altKo: string; altEn: string }
+  | { kind: "clip"; src: string; badge: "family" | "app"; altKo: string; altEn: string }
   | { kind: "moongi" }
   | { kind: "chat"; variant: "think" | "together" };
 
@@ -42,6 +42,7 @@ const MEDIA: Media[] = [
   {
     kind: "clip",
     src: "/media/play-tablet.webp",
+    badge: "family",
     altKo: "베타 가족 아이가 뭉이와 주고받으며 코끼리 이야기를 만들어가는 플레이 장면 (뒷모습)",
     altEn: "A beta-family child building an elephant story with Moongi, seen from behind",
   },
@@ -49,6 +50,7 @@ const MEDIA: Media[] = [
   {
     kind: "clip",
     src: "/media/play-balance.webp",
+    badge: "app",
     altKo: "몽글키즈 균형잡기 게임 장면 — 다리 위 코끼리를 좌우 버튼으로 함께 움직이는 놀이",
     altEn: "MongleKids balance game — moving the elephant on the bridge together with left/right buttons",
   },
@@ -56,20 +58,20 @@ const MEDIA: Media[] = [
 
 const LOCAL = {
   ko: {
-    badge: "베타 가족",
+    badge: { family: "베타 가족", app: "실제 앱 화면" },
     chat: {
       think: { ai: "넌 어떻게 생각해?", child: "내 생각엔요…!" },
       together: { ai: "같이 만들어볼까?", child: "좋아, 같이 하자!" },
     },
-    privacy: "실제 베타 가족의 플레이 장면이에요. 아이의 얼굴이 나오지 않는 장면만 사용해요.",
+    privacy: "실제 앱 화면과 베타 가족의 플레이 장면이에요. 아이의 얼굴이 나오지 않는 장면만 사용해요.",
   },
   en: {
-    badge: "Beta family",
+    badge: { family: "Beta family", app: "Real app" },
     chat: {
       think: { ai: "What do you think?", child: "I think…!" },
       together: { ai: "Shall we build it together?", child: "Yes, together!" },
     },
-    privacy: "Real beta-family play moments. We only use footage that doesn't show children's faces.",
+    privacy: "Real app screens and beta-family play moments. We only use footage that doesn't show children's faces.",
   },
 } as const;
 
@@ -115,7 +117,7 @@ export default function Shift() {
                         className="absolute inset-0 h-full w-full select-none object-cover"
                       />
                       <span className="font-display absolute left-2.5 top-2.5 rounded-full bg-white/85 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-grape-700 ring-1 ring-white backdrop-blur">
-                        {L.badge}
+                        {L.badge[m.badge]}
                       </span>
                     </>
                   ) : m.kind === "moongi" ? (
