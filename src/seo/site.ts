@@ -23,16 +23,19 @@ export const SITE = {
 
   /** Operating company. Used in Organization schema + footer / privacy. */
   operator: {
-    legalName: "Arcawave, Inc.",
+    legalName: "Arcawave",
+    legalNameKo: "아르카웨이브",
     shortName: "Arcawave",
     founder: "두지언",
+    /** Korean business registration number (사업자등록번호). */
+    bizRegNo: "332-12-02704",
     foundingYear: 2026,
     address: {
-      // TODO: replace with the real registered office address.
-      streetAddress: "서울특별시 강남구 테헤란로 123, 4층",
-      addressLocality: "서울특별시",
-      addressRegion: "강남구",
-      postalCode: "06234",
+      // TODO: replace with the real registered office address (still pending).
+      streetAddress: "",
+      addressLocality: "",
+      addressRegion: "",
+      postalCode: "",
       addressCountry: "KR",
     },
   },

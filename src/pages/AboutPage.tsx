@@ -40,7 +40,8 @@ const COPY = {
     companyRows: [
       { k: "법인명", v: SITE.operator.legalName },
       { k: "대표자", v: SITE.operator.founder },
-      { k: "본사", v: SITE.operator.address.streetAddress },
+      { k: "사업자등록번호", v: SITE.operator.bizRegNo },
+      { k: "본사", v: SITE.operator.address.streetAddress || "준비 중" },
       { k: "이메일", v: SITE.contact.email, href: `mailto:${SITE.contact.email}` },
       { k: "웹사이트", v: SITE.url, href: SITE.url },
       { k: "개인정보처리방침", v: "/privacy", href: "/privacy" },
@@ -78,7 +79,8 @@ const COPY = {
     companyRows: [
       { k: "Legal name", v: SITE.operator.legalName },
       { k: "Founder", v: SITE.operator.founder },
-      { k: "Office", v: SITE.operator.address.streetAddress },
+      { k: "Business Reg. No.", v: SITE.operator.bizRegNo },
+      { k: "Office", v: SITE.operator.address.streetAddress || "To be provided" },
       { k: "Email", v: SITE.contact.email, href: `mailto:${SITE.contact.email}` },
       { k: "Website", v: SITE.url, href: SITE.url },
       { k: "Privacy Policy", v: "/privacy", href: "/privacy" },

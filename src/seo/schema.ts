@@ -26,10 +26,15 @@ export function organizationSchema() {
     },
     address: {
       "@type": "PostalAddress",
-      streetAddress: SITE.operator.address.streetAddress,
-      addressLocality: SITE.operator.address.addressLocality,
-      addressRegion: SITE.operator.address.addressRegion,
-      postalCode: SITE.operator.address.postalCode,
+      // Street/locality omitted until the registered address is finalized.
+      ...(SITE.operator.address.streetAddress
+        ? {
+            streetAddress: SITE.operator.address.streetAddress,
+            addressLocality: SITE.operator.address.addressLocality,
+            addressRegion: SITE.operator.address.addressRegion,
+            postalCode: SITE.operator.address.postalCode,
+          }
+        : {}),
       addressCountry: SITE.operator.address.addressCountry,
     },
     contactPoint: {
