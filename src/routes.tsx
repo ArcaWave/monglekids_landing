@@ -5,6 +5,10 @@ import PrivacyPage from "./pages/PrivacyPage";
 import AboutPage from "./pages/AboutPage";
 import MethodPage from "./pages/MethodPage";
 import FAQPage from "./pages/FAQPage";
+import NewsPage from "./pages/NewsPage";
+import NewsIssuePage from "./pages/NewsIssuePage";
+import UnsubscribePage from "./pages/UnsubscribePage";
+import { allSlugs } from "./lib/newsletters";
 
 export const routes: RouteRecord[] = [
   {
@@ -35,6 +39,23 @@ export const routes: RouteRecord[] = [
         path: "faq",
         Component: FAQPage,
         entry: "src/pages/FAQPage.tsx",
+      },
+      {
+        path: "news",
+        Component: NewsPage,
+        entry: "src/pages/NewsPage.tsx",
+      },
+      {
+        path: "news/:slug",
+        Component: NewsIssuePage,
+        entry: "src/pages/NewsIssuePage.tsx",
+        // Prerender every published issue.
+        getStaticPaths: () => allSlugs().map((slug) => `/news/${slug}`),
+      },
+      {
+        path: "unsubscribe",
+        Component: UnsubscribePage,
+        entry: "src/pages/UnsubscribePage.tsx",
       },
     ],
   },

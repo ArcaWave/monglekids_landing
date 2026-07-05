@@ -29,6 +29,9 @@ export default function Footer() {
             <Link className="transition hover:text-grape-700" to="/method">
               {t.footer.nav.experience}
             </Link>
+            <Link className="transition hover:text-grape-700" to="/news">
+              {t.nav.news}
+            </Link>
             <a
               className="transition hover:text-grape-700"
               href={`mailto:${SITE.contact.email}`}

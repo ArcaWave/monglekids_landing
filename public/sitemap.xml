@@ -36,6 +36,29 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.monglekids.com/faq" />
   </url>
   <url>
+    <loc>https://www.monglekids.com/news</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.monglekids.com/news" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.monglekids.com/news" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.monglekids.com/news" />
+  </url>
+  <url>
+    <loc>https://www.monglekids.com/news/2026-06-10-beta-preview-bridge</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.monglekids.com/news/2026-06-01-golden-30-minutes</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.monglekids.com/news/2026-05-22-hello-monglekids</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://www.monglekids.com/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>

@@ -27,6 +27,7 @@ export default function Header() {
     { kind: "page", to: "/about", label: t.nav.why },
     { kind: "page", to: "/method", label: t.nav.experience },
     { kind: "section", id: "report", label: t.nav.report },
+    { kind: "page", to: "/news", label: t.nav.news },
     { kind: "section", id: "beta", label: t.nav.beta },
   ];
 

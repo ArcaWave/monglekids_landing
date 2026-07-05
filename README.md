@@ -33,6 +33,50 @@ If the env vars are missing the form still works in **demo mode** — it shows
 the success state but logs a console warning and stores nothing. Duplicate
 emails return HTTP 409 and are treated as "already on the list" (success UX).
 
+## Newsletter / subscribers setup (one-time)
+
+The `/news` page shows the newsletter archive and a subscribe form. Unlike
+the waitlist, subscriptions flow through **Vercel serverless functions**
+(`api/subscribe.ts`, `api/unsubscribe.ts`) so the Supabase **service-role
+key** and the **Resend** API key never reach the browser.
+
+1. Supabase → **SQL Editor** → run [`supabase/subscribers.sql`](supabase/subscribers.sql).
+   The table has RLS enabled with **no policies** — only the service-role
+   key (server-side) can read or write it.
+2. Create a [Resend](https://resend.com) account (free tier: 3,000/mo).
+   **Domains** → add `monglekids.com` → add the shown DNS records in
+   Vercel DNS → wait for "Verified".
+3. Vercel → Project → **Settings → Environment Variables** → add the
+   server-only vars from [.env.example](.env.example):
+   `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`,
+   `RESEND_FROM`. Redeploy.
+4. Subscribing sends a bilingual welcome email with a personal
+   unsubscribe link (`/unsubscribe?token=…`).
+
+**Publishing an issue** — add `src/content/newsletters/<slug>.ko.md` and
+`<slug>.en.md` (frontmatter: `title`, `date`, `tag`, `excerpt`), commit,
+deploy. The archive, issue page, and prerendered HTML update automatically.
+Also add the new URL to `public/sitemap.xml`.
+
+**Sending an issue** —
+
+```bash
+# dry run: shows audience size, sends nothing
+node scripts/send-newsletter.mjs src/content/newsletters/<slug>.ko.md --dry
+
+# real send (asks for confirmation; .ko.md targets lang=ko subscribers)
+RESEND_API_KEY=... SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... \
+  node scripts/send-newsletter.mjs src/content/newsletters/<slug>.ko.md
+```
+
+**Reading the list** — Supabase **Table Editor → subscribers**, or run the
+saved queries in [`supabase/queries.sql`](supabase/queries.sql) (counts,
+weekly signups, full CSV export via "Download CSV").
+
+Local `vite dev` has no `/api` functions — the subscribe form runs in demo
+mode (console warning, nothing stored). Use `vercel dev` or a preview
+deployment to exercise the real flow.
+
 ## Scripts
 
 ```bash
@@ -63,6 +107,9 @@ the page behaves as a normal SPA.
 | `/method`    | `pages/MethodPage.tsx`     | Educational philosophy (STEAM · AI)    |
 | `/faq`       | `pages/FAQPage.tsx`        | 12+ Q&A grouped by topic + FAQPage JSON-LD |
 | `/privacy`   | `pages/PrivacyPage.tsx`    | Bilingual privacy policy (KR + EN)     |
+| `/news`      | `pages/NewsPage.tsx`       | Newsletter archive + subscribe form    |
+| `/news/:slug`| `pages/NewsIssuePage.tsx`  | One issue (prerendered per slug)       |
+| `/unsubscribe`| `pages/UnsubscribePage.tsx`| Token-based unsubscribe (noindex)      |
 
 Add a new page → create `src/pages/NewPage.tsx`, then add a route to
 `src/routes.tsx` (with `Component` and `entry`). The page will be picked up
