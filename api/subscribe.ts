@@ -1,6 +1,9 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { z } from "zod";
-import { welcomeEmail, sendEmail } from "./_lib/email";
+// NOTE: the .js extension is required — package.json has "type": "module",
+// so Vercel runs this as ESM, and ESM mandates explicit extensions on
+// relative imports (TS resolves .js → the .ts source at compile time).
+import { welcomeEmail, sendEmail } from "./_lib/email.js";
 
 /**
  * POST /api/subscribe — add (or reactivate) a newsletter subscriber.
