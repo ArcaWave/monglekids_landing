@@ -41,3 +41,8 @@ alter table public.subscribers enable row level security;
 
 -- Intentionally NO policies: anon and authenticated roles are fully
 -- locked out. Only the service-role key (server-side) can touch rows.
+
+-- service_role bypasses RLS but still needs plain table privileges.
+-- (Some projects don't apply default grants to tables created in the
+-- SQL Editor — without this line the API gets 42501 permission denied.)
+grant select, insert, update on public.subscribers to service_role;

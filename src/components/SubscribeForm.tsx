@@ -50,6 +50,8 @@ const COPY = {
     successTitle: "구독 완료!",
     successBody:
       "몽글키즈 소식과 얼리 액세스 소식을 가끔, 정성껏 보내드릴게요. 받은편지함에서 환영 인사를 확인해보세요.",
+    successHint:
+      "혹시 메일이 '프로모션' 탭에 들어가 있다면 기본 탭으로 옮겨주세요. 다음 소식부터 놓치지 않아요.",
     successReset: "다른 이메일로 구독하기",
     errors: {
       email: "이메일을 입력해주세요.",
@@ -90,6 +92,8 @@ const COPY = {
     successTitle: "You're subscribed!",
     successBody:
       "We'll send occasional MongleKids updates and early access news. Check your inbox for a welcome note.",
+    successHint:
+      "If our email lands in the Promotions tab, drag it to Primary — you won't miss the next issue.",
     successReset: "Subscribe with another email",
     errors: {
       email: "Please enter your email.",
@@ -179,6 +183,9 @@ export default function SubscribeForm() {
         </h3>
         <p className="mx-auto mt-2 max-w-md text-[14.5px] leading-relaxed text-ink-600">
           {c.successBody}
+        </p>
+        <p className="mx-auto mt-3 max-w-md rounded-2xl bg-sun-100/60 px-4 py-2.5 text-[12.5px] leading-relaxed text-ink-700 ring-1 ring-sun-300/50">
+          💡 {c.successHint}
         </p>
         <button
           onClick={() => {
