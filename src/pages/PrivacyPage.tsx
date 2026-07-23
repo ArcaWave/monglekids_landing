@@ -8,6 +8,10 @@ import { SITE } from "../seo/site";
 
 const EFFECTIVE_DATE_KO = "2026년 6월 13일";
 const EFFECTIVE_DATE_EN = "June 13, 2026";
+const LAST_UPDATED_KO = "2026년 7월 22일";
+const LAST_UPDATED_EN = "July 22, 2026";
+const ADDRESS_KO = "서울특별시 성북구 보문로29가길 48, 201호";
+const ADDRESS_EN = "201, 48 Bomun-ro 29ga-gil, Seongbuk-gu, Seoul, Republic of Korea";
 const BIZ_NO = SITE.operator.bizRegNo;
 const EMAIL = SITE.contact.email;
 
@@ -72,7 +76,7 @@ export default function PrivacyPage() {
             />
             <Meta
               label="최종 수정일 / Last Updated"
-              value={`${EFFECTIVE_DATE_KO} / ${EFFECTIVE_DATE_EN}`}
+              value={`${LAST_UPDATED_KO} / ${LAST_UPDATED_EN}`}
             />
             <Meta label="운영자 / Operator" value="아르카웨이브 (Arcawave)" />
             <Meta label="대표 / Representative" value="두지언 (Doo Jieon)" />
@@ -180,7 +184,9 @@ export default function PrivacyPage() {
         {/* ---------- 2. KOREAN POLICY ---------- */}
         <Section id="kr" title="2. 한국어 개인정보처리방침">
           <H3>몽글키즈(Monglekids) 개인정보처리방침</H3>
-          <P>시행일 · 최종 수정일: {EFFECTIVE_DATE_KO}</P>
+          <P>
+            시행일: {EFFECTIVE_DATE_KO} · 최종 수정일: {LAST_UPDATED_KO}
+          </P>
           <P>
             아르카웨이브(Arcawave)(이하 “회사”)는 어린이를 위한 창의융합(STEAM)·AI 교육
             서비스인 몽글키즈(Monglekids)(이하 “서비스”)를 운영합니다. 본 개인정보처리방침은
@@ -188,10 +194,11 @@ export default function PrivacyPage() {
             사용하고 보호하는지 설명합니다.
           </P>
           <P>
-            회사는 어린이의 개인정보 보호를 매우 중요하게 생각합니다. 회사는 대한민국 개인정보
-            보호법(PIPA), 미국 아동 온라인 개인정보 보호법(COPPA), 유럽 개인정보 보호법(GDPR),
-            미국 캘리포니아 소비자 개인정보 보호법(CCPA) 등 적용 가능한 개인정보 보호 법령과
-            앱마켓 정책을 준수하기 위해 노력합니다.
+            회사는 어린이의 개인정보 보호를 매우 중요하게 생각합니다. 회사는 대한민국
+            「개인정보 보호법」(PIPA), 미국 아동 온라인 개인정보 보호법(COPPA), 미국
+            캘리포니아 소비자 개인정보 보호법(CCPA/CPRA) 등 적용 가능한 개인정보 보호
+            법령과 앱마켓 정책을 준수하기 위해 노력합니다. 서비스가 제공되는 지역별 안내는
+            제12항을 참고하세요.
           </P>
 
           <H3>1. 개요</H3>
@@ -379,7 +386,7 @@ export default function PrivacyPage() {
             조치를 적용합니다.
           </P>
 
-          <H3>9. 아동 개인정보 보호</H3>
+          <H3>9. 아동 개인정보 보호 (만 14세 미만 / 13세 미만)</H3>
           <P>
             계정 개설과 동의의 주체는 보호자(법정대리인)이며, 아이 프로필은 보호자가 입력합니다.
             회사는 만 14세 미만(대한민국 PIPA) 및 13세 미만(미국 COPPA) 아동의 개인정보를
@@ -388,14 +395,31 @@ export default function PrivacyPage() {
           <P>회사는 다음 원칙을 따릅니다.</P>
           <UL
             items={[
+              <>
+                <strong>아동에게서 직접 수집하는 정보는 없습니다.</strong> 계정 · 프로필 ·
+                동의는 모두 보호자가 생성 · 입력합니다.
+              </>,
+              <>
+                서비스는{" "}
+                <strong>
+                  아동의 개인정보 제공을 조건으로 콘텐츠 · 활동 참여를 제한하지 않습니다.
+                </strong>{" "}
+                (기능 수행에 합리적으로 필요한 범위를 넘는 정보를 요구하지 않습니다.)
+              </>,
               "어린이 개인정보를 필요한 최소한으로만 처리합니다.",
               "광고와 맞춤형 광고를 제공하지 않습니다.",
               "정밀 위치와 연락처를 수집하지 않습니다.",
               "카메라 · 음성 원본을 기기 내에서만 처리하고 서버에 저장하지 않습니다.",
               "외부 링크 · 구매 · 결제 · 설정 등에는 부모 확인(Parental Gate)을 적용하고, 데이터 수집 전 보호자 동의 절차를 둡니다.",
-              "보호자가 요청하면 자녀의 개인정보를 열람 · 정정 · 삭제하거나 추가 수집을 중단할 수 있도록 지원합니다.",
+              "아동 관련하여 처리하는 정보는 제2항의 내용과 같으며, 이를 제3자에게 판매하거나 광고 목적으로 사용하지 않습니다.",
             ]}
           />
+          <P>
+            보호자(법정대리인)는 언제든 ① 아동 데이터의 <strong>열람</strong>, ②{" "}
+            <strong>삭제</strong>, ③ <strong>추가 수집 거부(동의 철회)</strong>를 요청할 수
+            있습니다. 앱 내 [설정 &gt; 개인정보 및 보안 &gt; 계정 삭제] 또는 <MailLink /> 로
+            요청하시면 지체 없이 처리합니다. (자세한 행사 방법은 제10항 참조)
+          </P>
 
           <H3>10. 이용자 권리 및 행사 방법</H3>
           <P>보호자(법정대리인)는 자녀의 개인정보에 대해 다음 권리를 행사할 수 있습니다.</P>
@@ -413,21 +437,43 @@ export default function PrivacyPage() {
             가능한 법령에 따라 합리적인 기간 내에 요청을 처리합니다.
           </P>
 
-          <H3>11. 캘리포니아 주민의 권리 (CCPA)</H3>
+          <H3>11. 캘리포니아 주민의 권리 (CCPA/CPRA)</H3>
           <P>
-            캘리포니아 거주자는 개인정보 열람 · 삭제 및 “판매/공유 거부” 권리를 가집니다.
-            몽글키즈는 개인정보를 판매하거나 공유하지 않습니다(미성년자 포함). 권리 행사 요청은{" "}
-            <MailLink /> 로 보내주시기 바랍니다.
+            캘리포니아 거주자는 개인정보 열람 · 삭제 및 “판매/공유 거부(opt-out)” 권리를
+            가집니다. 서비스는 개인정보를 <strong>판매하거나 타겟 광고 목적으로 공유하지
+            않으며</strong>, 16세 미만 아동 · 청소년의 개인정보 역시 판매 · 공유하지 않습니다.
+            권리 행사 요청은 <MailLink /> 로 보내주시기 바랍니다.
           </P>
 
-          <H3>12. 정책 변경</H3>
+          <H3>12. 지역별 추가 안내</H3>
+          <UL
+            items={[
+              <>
+                <strong>대한민국</strong>: 「개인정보 보호법」에 따라 만 14세 미만 아동의
+                개인정보는 법정대리인의 동의 하에 처리됩니다. 이용자는 개인정보 열람 · 정정 ·
+                삭제 · 처리정지를 요구할 권리가 있습니다. (제10항 참조)
+              </>,
+              <>
+                <strong>미국</strong>: 13세 미만 아동에 대해 COPPA(아동 온라인 프라이버시
+                보호법)를 준수합니다. (제9항 참조) 캘리포니아 거주자의 권리는 제11항을
+                참조하세요.
+              </>,
+              <>
+                <strong>유럽경제지역(EEA) · 영국</strong>: 현재 서비스는 해당 지역에 제공되지
+                않습니다. 향후 제공 시 GDPR/UK GDPR에 따른 처리 근거 · 이용자 권리 안내를 본
+                방침에 반영할 예정입니다.
+              </>,
+            ]}
+          />
+
+          <H3>13. 정책 변경</H3>
           <P>
             회사는 서비스 기능, 법령, 앱마켓 정책 변경에 따라 본 개인정보처리방침을 수정할 수
             있습니다. 중요한 변경이 있는 경우 앱, 웹사이트 또는 기타 적절한 방법으로 안내하며,
             변경된 방침은 표시된 시행일부터 적용됩니다.
           </P>
 
-          <H3>13. 연락처 및 사업자 정보</H3>
+          <H3>14. 연락처 및 사업자 정보</H3>
           <UL
             items={[
               "서비스명: 몽글키즈(Monglekids)",
@@ -436,7 +482,7 @@ export default function PrivacyPage() {
               `사업자등록번호: ${BIZ_NO}`,
               <>이메일: <MailLink /></>,
               "웹사이트: https://www.monglekids.com",
-              "주소: 준비 중 (추후 안내)",
+              `주소: ${ADDRESS_KO}`,
             ]}
           />
         </Section>
@@ -444,7 +490,9 @@ export default function PrivacyPage() {
         {/* ---------- 3. ENGLISH POLICY ---------- */}
         <Section id="en" title="3. English Privacy Policy">
           <H3>Monglekids Privacy Policy</H3>
-          <P>Effective / Last Updated: {EFFECTIVE_DATE_EN}</P>
+          <P>
+            Effective: {EFFECTIVE_DATE_EN} · Last Updated: {LAST_UPDATED_EN}
+          </P>
           <P>
             Arcawave (“we,” “us,” or “our”) operates Monglekids, also known in Korean as 몽글키즈,
             a creative-convergence (STEAM) and AI education service for children. This Privacy
@@ -453,10 +501,10 @@ export default function PrivacyPage() {
           </P>
           <P>
             We take children’s privacy seriously. We strive to comply with applicable privacy
-            laws, including the Children’s Online Privacy Protection Act (“COPPA”), the General
-            Data Protection Regulation (“GDPR”), Korea’s Personal Information Protection Act
-            (“PIPA”), and the California Consumer Privacy Act (“CCPA”), as well as applicable app
-            marketplace policies.
+            laws, including Korea’s Personal Information Protection Act (“PIPA”), the U.S.
+            Children’s Online Privacy Protection Act (“COPPA”), and the California Consumer
+            Privacy Act (“CCPA/CPRA”), as well as applicable app marketplace policies. See
+            Section 12 for region-specific notices.
           </P>
 
           <H3>1. Introduction</H3>
@@ -645,7 +693,7 @@ export default function PrivacyPage() {
             communication in accordance with applicable laws.
           </P>
 
-          <H3>9. Children’s Privacy</H3>
+          <H3>9. Children’s Privacy (Under 14 / Under 13)</H3>
           <P>
             The guardian (legal representative) is the account holder and consent authority, and
             enters the child’s profile. We process the personal information of children under 14
@@ -653,14 +701,34 @@ export default function PrivacyPage() {
           </P>
           <UL
             items={[
+              <>
+                <strong>We do not collect personal information directly from children.</strong>{" "}
+                Accounts, profiles, and consent are all created and entered by a guardian.
+              </>,
+              <>
+                We{" "}
+                <strong>
+                  do not condition a child’s participation in content or activities on the
+                  disclosure of personal information
+                </strong>{" "}
+                beyond what is reasonably necessary for the feature to work.
+              </>,
               "We process only the minimum information necessary.",
               "We do not provide advertising or targeted advertising.",
               "We do not collect precise location or contacts.",
               "Raw camera and voice data are processed on device and not stored on our servers.",
               "We apply a Parental Gate before external links, purchases, payments, or settings, and obtain guardian consent before collecting data.",
-              "Guardians may request access, correction, deletion, or prevention of further collection of their child’s information.",
+              "The information we process in connection with children is described in Section 2. We do not sell it or use it for advertising purposes.",
             ]}
           />
+          <P>
+            Guardians (legal representatives) may at any time request (i){" "}
+            <strong>access to</strong>, (ii) <strong>deletion of</strong>, and (iii){" "}
+            <strong>refusal of further collection of</strong> (withdrawal of consent for) their
+            child’s data. Requests can be made in the app at [Settings &gt; Privacy &amp;
+            Security &gt; Delete Account] or by contacting <MailLink />, and are handled without
+            undue delay. (See Section 10 for details.)
+          </P>
 
           <H3>10. Your Rights and How to Exercise Them</H3>
           <UL
@@ -678,14 +746,42 @@ export default function PrivacyPage() {
             applicable law.
           </P>
 
-          <H3>11. California Privacy Rights (CCPA)</H3>
+          <H3>11. California Privacy Rights (CCPA/CPRA)</H3>
           <P>
             California residents have the right to access and delete their personal information
-            and to opt out of its “sale/sharing.” Monglekids does not sell or share personal
-            information (including that of minors). To exercise these rights, contact <MailLink />.
+            and to opt out of its “sale” or “sharing.” We{" "}
+            <strong>
+              do not sell personal information and do not share it for cross-context behavioral
+              (targeted) advertising
+            </strong>
+            , and we do not sell or share the personal information of consumers under 16 years
+            of age. To exercise these rights, contact <MailLink />.
           </P>
 
-          <H3>12. Policy Changes</H3>
+          <H3>12. Region-Specific Notices</H3>
+          <UL
+            items={[
+              <>
+                <strong>Republic of Korea</strong>: Under the Personal Information Protection
+                Act, the personal information of children under 14 is processed with the consent
+                of a legal representative. Users have the right to request access, correction,
+                deletion, and suspension of processing. (See Section 10.)
+              </>,
+              <>
+                <strong>United States</strong>: We comply with COPPA (the Children’s Online
+                Privacy Protection Act) for children under 13. (See Section 9.) For California
+                residents, see Section 11.
+              </>,
+              <>
+                <strong>European Economic Area (EEA) &amp; United Kingdom</strong>: The service
+                is not currently offered in these regions. If we offer the service there in the
+                future, we will update this policy with the legal bases for processing and user
+                rights under the GDPR / UK GDPR.
+              </>,
+            ]}
+          />
+
+          <H3>13. Policy Changes</H3>
           <P>
             We may update this Privacy Policy when the service, laws, or app marketplace policies
             change. If we make material changes, we will notify users through the app, website, or
@@ -693,7 +789,7 @@ export default function PrivacyPage() {
             date.
           </P>
 
-          <H3>13. Contact & Business Information</H3>
+          <H3>14. Contact & Business Information</H3>
           <UL
             items={[
               "Service: 몽글키즈 (Monglekids)",
@@ -702,7 +798,7 @@ export default function PrivacyPage() {
               `Business Registration No.: ${BIZ_NO}`,
               <>Email: <MailLink /></>,
               "Website: https://www.monglekids.com",
-              "Address: to be provided",
+              `Address: ${ADDRESS_EN}`,
             ]}
           />
         </Section>
@@ -758,7 +854,10 @@ export default function PrivacyPage() {
                 </a>
               }
             />
-            <ContactRow label="주소 / Address" value="준비 중 (추후 안내) / To be provided" />
+            <ContactRow
+              label="주소 / Address"
+              value={`${ADDRESS_KO} / ${ADDRESS_EN}`}
+            />
           </div>
         </Section>
       </main>
