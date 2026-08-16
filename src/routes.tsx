@@ -8,6 +8,7 @@ import FAQPage from "./pages/FAQPage";
 import NewsPage from "./pages/NewsPage";
 import NewsIssuePage from "./pages/NewsIssuePage";
 import UnsubscribePage from "./pages/UnsubscribePage";
+import DeleteAccountPage from "./pages/DeleteAccountPage";
 import { allSlugs } from "./lib/newsletters";
 
 export const routes: RouteRecord[] = [
@@ -56,6 +57,11 @@ export const routes: RouteRecord[] = [
         path: "unsubscribe",
         Component: UnsubscribePage,
         entry: "src/pages/UnsubscribePage.tsx",
+      },
+      {
+        path: "delete-account",
+        Component: DeleteAccountPage,
+        entry: "src/pages/DeleteAccountPage.tsx",
       },
     ],
   },
