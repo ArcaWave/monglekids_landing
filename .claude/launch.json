@@ -2,6 +2,12 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "saju",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "/Users/josh/Desktop/Saju", "run", "dev", "--", "-p", "3777"],
+      "port": 3777
+    },
+    {
       "name": "monglekids-dev",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev", "--", "--port", "5180", "--strictPort"],
