@@ -10,8 +10,8 @@ const EFFECTIVE_DATE_KO = "2026년 6월 13일";
 const EFFECTIVE_DATE_EN = "June 13, 2026";
 const LAST_UPDATED_KO = "2026년 7월 22일";
 const LAST_UPDATED_EN = "July 22, 2026";
-const ADDRESS_KO = "서울특별시 성북구 보문로29가길 48, 201호";
-const ADDRESS_EN = "201, 48 Bomun-ro 29ga-gil, Seongbuk-gu, Seoul, Republic of Korea";
+const ADDRESS_KO = "서울특별시 성북구 보문로29가길 48";
+const ADDRESS_EN = "48 Bomun-ro 29ga-gil, Seongbuk-gu, Seoul, Republic of Korea";
 const BIZ_NO = SITE.operator.bizRegNo;
 const EMAIL = SITE.contact.email;
 
