@@ -9,6 +9,7 @@ import NewsPage from "./pages/NewsPage";
 import NewsIssuePage from "./pages/NewsIssuePage";
 import UnsubscribePage from "./pages/UnsubscribePage";
 import DeleteAccountPage from "./pages/DeleteAccountPage";
+import TermsPage from "./pages/TermsPage";
 import { allSlugs } from "./lib/newsletters";
 
 export const routes: RouteRecord[] = [
@@ -62,6 +63,11 @@ export const routes: RouteRecord[] = [
         path: "delete-account",
         Component: DeleteAccountPage,
         entry: "src/pages/DeleteAccountPage.tsx",
+      },
+      {
+        path: "terms",
+        Component: TermsPage,
+        entry: "src/pages/TermsPage.tsx",
       },
     ],
   },

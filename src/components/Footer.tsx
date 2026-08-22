@@ -41,7 +41,7 @@ export default function Footer() {
             <Link className="transition hover:text-grape-700" to="/privacy">
               {t.footer.nav.privacy}
             </Link>
-            <Link className="transition hover:text-grape-700" to="/privacy">
+            <Link className="transition hover:text-grape-700" to="/terms">
               {t.footer.nav.terms}
             </Link>
           </nav>
