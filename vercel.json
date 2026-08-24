@@ -1,6 +1,11 @@
 {
   "rewrites": [
     { "source": "/gallery", "destination": "/gallery/index.html" },
+
+    { "source": "/r/:token", "destination": "https://jellying.vercel.app/r/:token" },
+    { "source": "/_expo/:path*", "destination": "https://jellying.vercel.app/_expo/:path*" },
+    { "source": "/assets/:path*", "destination": "https://jellying.vercel.app/assets/:path*" },
+
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }

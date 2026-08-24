@@ -20,6 +20,13 @@
       "runtimeArgs": ["run", "preview", "--", "--port", "5181", "--strictPort"],
       "port": 5181,
       "autoPort": false
+    },
+    {
+      "name": "gallery-test",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["-y", "serve", "-l", "5199", "/Users/josh/Desktop/monggle-kids"],
+      "port": 5199,
+      "autoPort": false
     }
   ]
 }
