@@ -1,6 +1,7 @@
 {
   "rewrites": [
     { "source": "/gallery", "destination": "/gallery/index.html" },
+    { "source": "/delete-account", "destination": "/delete-account/index.html" },
 
     { "source": "/r/:token", "destination": "https://jellying.vercel.app/r/:token" },
     { "source": "/_expo/:path*", "destination": "https://jellying.vercel.app/_expo/:path*" },
