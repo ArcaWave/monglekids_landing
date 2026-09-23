@@ -70,6 +70,7 @@ export function educationalAppSchema() {
     name: SITE.brandKo,
     alternateName: SITE.brandEn,
     operatingSystem: "iOS, Android, Web",
+    installUrl: [SITE.stores.appStore, SITE.stores.googlePlay],
     applicationCategory: "EducationalApplication",
     applicationSubCategory: "STEAM, Creativity, AI Companion",
     audience: {

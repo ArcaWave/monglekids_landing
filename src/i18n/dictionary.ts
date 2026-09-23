@@ -34,6 +34,9 @@ const ko = {
     ctaSecondary: "아이 경험 미리보기",
     socialStrong: "+1,200명",
     socialRest: "의 부모가 먼저 베타를 기다리고 있어요",
+    storeLabel: "지금 앱으로 만나보세요",
+    appStoreSmall: "다운로드하기",
+    playStoreSmall: "다운로드하기",
   },
   heroMock: {
     todaysMissionLabel: "오늘의 놀이",
@@ -274,6 +277,9 @@ const en: typeof ko = {
     ctaSecondary: "See how it works",
     socialStrong: "1,200+ parents",
     socialRest: " are already on the waitlist",
+    storeLabel: "Available now on",
+    appStoreSmall: "Download on the",
+    playStoreSmall: "Get it on",
   },
   heroMock: {
     todaysMissionLabel: "Today's play",

@@ -1,5 +1,6 @@
 import { ArrowRight, Sparkles, Play } from "lucide-react";
 import HeroMock from "./HeroMock";
+import StoreBadges from "./StoreBadges";
 import Cloud from "./Cloud";
 import CloudScape from "./CloudScape";
 import { useLang, withBreaks } from "../i18n/LanguageContext";
@@ -67,6 +68,13 @@ export default function Hero() {
               </span>
               {t.hero.ctaSecondary}
             </button>
+          </div>
+
+          <div className="mt-6">
+            <p className="font-display text-[12px] font-semibold uppercase tracking-[0.14em] text-ink-400">
+              {t.hero.storeLabel}
+            </p>
+            <StoreBadges className="mt-2.5" />
           </div>
 
           <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-ink-600">

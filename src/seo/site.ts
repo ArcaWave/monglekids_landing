@@ -21,6 +21,12 @@ export const SITE = {
     email: "help@arcawave.xyz",
   },
 
+  /** Public store listings (ids from the app repo's eas.json / app.json). */
+  stores: {
+    appStore: "https://apps.apple.com/kr/app/id6767938840",
+    googlePlay: "https://play.google.com/store/apps/details?id=com.uauo.artvillage",
+  },
+
   /** Operating company. Used in Organization schema + footer / privacy. */
   operator: {
     legalName: "Arcawave",
