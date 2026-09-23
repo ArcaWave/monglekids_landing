@@ -1,4 +1,4 @@
-import { ArrowRight, Sparkles, Play } from "lucide-react";
+import { Sparkles, Play } from "lucide-react";
 import HeroMock from "./HeroMock";
 import StoreBadges from "./StoreBadges";
 import Cloud from "./Cloud";
@@ -51,14 +51,8 @@ export default function Hero() {
             {t.hero.sub}
           </p>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <button
-              onClick={() => scrollTo("beta")}
-              className="group inline-flex items-center justify-center gap-2 rounded-full bg-grape-700 px-6 py-3.5 text-[15px] font-semibold text-white transition hover:bg-grape-800 clay-shadow"
-            >
-              {t.hero.ctaPrimary}
-              <ArrowRight className="h-4.5 w-4.5 transition-transform group-hover:translate-x-1" />
-            </button>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <StoreBadges />
             <button
               onClick={() => scrollTo("experience")}
               className="group inline-flex items-center justify-center gap-2 rounded-full bg-white/80 px-5 py-3.5 text-[15px] font-semibold text-ink-800 ring-1 ring-grape-100 backdrop-blur transition hover:bg-white clay-shadow-sm"
@@ -68,13 +62,6 @@ export default function Hero() {
               </span>
               {t.hero.ctaSecondary}
             </button>
-          </div>
-
-          <div className="mt-6">
-            <p className="font-display text-[12px] font-semibold uppercase tracking-[0.14em] text-ink-400">
-              {t.hero.storeLabel}
-            </p>
-            <StoreBadges className="mt-2.5" />
           </div>
 
           <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-ink-600">

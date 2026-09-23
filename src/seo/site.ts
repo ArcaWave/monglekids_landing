@@ -23,7 +23,7 @@ export const SITE = {
 
   /** Public store listings (ids from the app repo's eas.json / app.json). */
   stores: {
-    appStore: "https://apps.apple.com/kr/app/id6767938840",
+    appStore: "https://apps.apple.com/app/%EB%AA%BD%EA%B8%80%ED%82%A4%EC%A6%88/id6767938840",
     googlePlay: "https://play.google.com/store/apps/details?id=com.uauo.artvillage",
   },
 

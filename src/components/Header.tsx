@@ -5,6 +5,7 @@ import Logo from "./Logo";
 import LangToggle from "./LangToggle";
 import { useLang } from "../i18n/LanguageContext";
 import { useScrollToSection } from "../lib/useScrollToSection";
+import { useDownloadCta } from "../lib/useDownloadCta";
 
 /**
  * The top nav. Some links are real pages (`/about`, `/method`, `/faq`),
@@ -16,6 +17,7 @@ export default function Header() {
   const { t } = useLang();
   const location = useLocation();
   const scrollTo = useScrollToSection();
+  const download = useDownloadCta();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -44,7 +46,7 @@ export default function Header() {
   }, [location.pathname]);
 
   const triggerCta = () => {
-    scrollTo("beta");
+    download();
     setOpen(false);
   };
 
