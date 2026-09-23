@@ -9,7 +9,7 @@ import { useDownloadCta } from "../lib/useDownloadCta";
 
 /**
  * The top nav. Some links are real pages (`/about`, `/method`, `/faq`),
- * others jump to a section on the home page (`#beta`, `#experience`).
+ * others jump to a section on the home page (`#newsletter`, `#report`).
  * Section links work from any page — `useScrollToSection` will navigate
  * home first if needed.
  */
@@ -30,7 +30,7 @@ export default function Header() {
     { kind: "page", to: "/method", label: t.nav.experience },
     { kind: "section", id: "report", label: t.nav.report },
     { kind: "page", to: "/news", label: t.nav.news },
-    { kind: "section", id: "beta", label: t.nav.beta },
+    { kind: "section", id: "newsletter", label: t.nav.newsletter },
   ];
 
   useEffect(() => {

@@ -21,7 +21,7 @@ const COPY = {
   ko: {
     eyebrow: "NEWSLETTER",
     title: "몽글키즈 소식 받기",
-    sub: "제품 소식, 창의 교육 아이디어, 출시 소식을 이메일로 받아보세요.",
+    sub: "새 놀이 미션과 앱 업데이트, 창의 교육 아이디어를 이메일로 받아보세요.",
     email: "이메일",
     emailPh: "hello@example.com",
     moreOpen: "조금 더 알려주실래요? (선택)",
@@ -42,14 +42,14 @@ const COPY = {
     ageRangePh: "선택해주세요",
     ageRanges: ["4–5세", "6–7세", "8–9세", "예비 · 기타"],
     interests: "관심 있는 소식 (선택)",
-    interestOptions: ["제품 소식", "창의교육 아이디어", "베타 · 출시 소식"],
+    interestOptions: ["제품 소식", "창의교육 아이디어", "앱 업데이트 · 이벤트"],
     consent:
       "몽글키즈 이메일 수신에 동의하며, 언제든 수신거부할 수 있음을 이해합니다.",
     submit: "구독하기",
     submitting: "구독 처리 중…",
     successTitle: "구독 완료!",
     successBody:
-      "몽글키즈 소식과 얼리 액세스 소식을 가끔, 정성껏 보내드릴게요. 받은편지함에서 환영 인사를 확인해보세요.",
+      "몽글키즈 소식을 가끔, 정성껏 보내드릴게요. 받은편지함에서 환영 인사를 확인해보세요.",
     successHint:
       "혹시 메일이 '프로모션' 탭에 들어가 있다면 기본 탭으로 옮겨주세요. 다음 소식부터 놓치지 않아요.",
     successReset: "다른 이메일로 구독하기",
@@ -63,7 +63,7 @@ const COPY = {
   en: {
     eyebrow: "NEWSLETTER",
     title: "Get MongleKids updates",
-    sub: "Subscribe to receive product news, creative learning ideas, and launch updates.",
+    sub: "Get new play missions, app updates, and creative learning ideas by email.",
     email: "Email",
     emailPh: "hello@example.com",
     moreOpen: "Tell us a bit more? (optional)",
@@ -84,14 +84,14 @@ const COPY = {
     ageRangePh: "Please select",
     ageRanges: ["Ages 4–5", "Ages 6–7", "Ages 8–9", "Expecting · Other"],
     interests: "What interests you? (optional)",
-    interestOptions: ["Product news", "Learning ideas", "Beta & launch news"],
+    interestOptions: ["Product news", "Learning ideas", "App updates & events"],
     consent:
       "I agree to receive MongleKids emails and understand I can unsubscribe at any time.",
     submit: "Subscribe",
     submitting: "Subscribing…",
     successTitle: "You're subscribed!",
     successBody:
-      "We'll send occasional MongleKids updates and early access news. Check your inbox for a welcome note.",
+      "We'll send occasional MongleKids updates. Check your inbox for a welcome note.",
     successHint:
       "If our email lands in the Promotions tab, drag it to Primary — you won't miss the next issue.",
     successReset: "Subscribe with another email",
@@ -106,7 +106,7 @@ const COPY = {
 
 type Errors = Partial<Record<"email" | "consent", string>>;
 
-export default function SubscribeForm() {
+export default function SubscribeForm({ bare = false }: { bare?: boolean } = {}) {
   const { lang } = useLang();
   const c = COPY[lang];
 
@@ -168,7 +168,13 @@ export default function SubscribeForm() {
 
   if (submitted) {
     return (
-      <div className="rounded-[28px] bg-white p-8 text-center ring-1 ring-grape-100/70 clay-shadow sm:p-10">
+      <div
+        className={
+          bare
+            ? "flex min-h-[420px] flex-col items-center justify-center text-center"
+            : "rounded-[28px] bg-white p-8 text-center ring-1 ring-grape-100/70 clay-shadow sm:p-10"
+        }
+      >
         <span className="cloud-shadow relative mx-auto inline-flex h-20 w-20 items-center justify-center">
           <Cloud
             fill="#FFFFFF"
@@ -208,7 +214,7 @@ export default function SubscribeForm() {
   }
 
   return (
-    <div className="rounded-[28px] bg-white p-6 ring-1 ring-grape-100/70 clay-shadow sm:p-8">
+    <div className={bare ? "" : "rounded-[28px] bg-white p-6 ring-1 ring-grape-100/70 clay-shadow sm:p-8"}>
       <span className="font-display inline-flex items-center gap-2 rounded-full bg-grape-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-grape-700 ring-1 ring-grape-100">
         <Sparkles className="h-3.5 w-3.5" /> {c.eyebrow}
       </span>

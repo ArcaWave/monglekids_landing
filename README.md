@@ -11,27 +11,16 @@ Operated by Arcawave, Inc. — https://www.monglekids.com
 - **vite-react-ssg** — static prerender at build time
 - **react-helmet-async** — per-page `<head>` (title / meta / JSON-LD)
 - **Vercel** — hosting (SPA fallback via `vercel.json`)
-- **Supabase** — waitlist storage (and the mobile app's DB)
+- **Supabase** — newsletter subscribers (and the mobile app's DB)
 
-## Waitlist setup (one-time)
+## Beta waitlist (retired)
 
-The beta form on the landing page writes to a Supabase table.
-
-1. Open the Supabase project → **SQL Editor** → paste & run
-   [`supabase/waitlist.sql`](supabase/waitlist.sql).
-   This creates `public.waitlist` with an **INSERT-only RLS policy** for the
-   anon role (the public key can add a signup but never read the list).
-2. Dashboard → **Project Settings → API** → copy:
-   - Project URL → `VITE_SUPABASE_URL`
-   - anon public key → `VITE_SUPABASE_ANON_KEY`
-3. Local dev: copy `.env.example` to `.env` and fill both values.
-   Production: Vercel → Project → **Settings → Environment Variables** →
-   add both, then redeploy.
-4. Read signups in Supabase **Table Editor → waitlist** (or export CSV).
-
-If the env vars are missing the form still works in **demo mode** — it shows
-the success state but logs a console warning and stores nothing. Duplicate
-emails return HTTP 409 and are treated as "already on the list" (success UX).
+Before launch, the home page had a beta waitlist form that wrote straight
+to a Supabase `public.waitlist` table ([`supabase/waitlist.sql`](supabase/waitlist.sql)).
+That form was replaced by the newsletter section after the app launched —
+the existing signups are still in **Table Editor → waitlist**, but nothing
+writes to it anymore, and `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`
+are no longer used by the site.
 
 ## Newsletter / subscribers setup (one-time)
 

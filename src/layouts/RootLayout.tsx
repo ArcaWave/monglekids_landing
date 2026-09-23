@@ -23,7 +23,7 @@ export default function RootLayout() {
 /**
  * On every route change, scroll to top — unless the URL contains a #hash,
  * in which case smooth-scroll to the matching element. This handles deep
- * links like `/#beta` from the header CTA when the user is on a non-home
+ * links like `/#newsletter` from the header when the user is on a non-home
  * page.
  */
 function ScrollManager() {

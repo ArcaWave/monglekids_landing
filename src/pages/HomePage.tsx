@@ -8,7 +8,7 @@ import Experience from "../components/Experience";
 import ParentValue from "../components/ParentValue";
 import Differentiation from "../components/Differentiation";
 import Framework from "../components/Framework";
-import BetaForm from "../components/BetaForm";
+import NewsletterSection from "../components/NewsletterSection";
 import FAQ from "../components/FAQ";
 import FinalCTA from "../components/FinalCTA";
 import Footer from "../components/Footer";
@@ -70,7 +70,7 @@ export default function HomePage() {
         <ParentValue />
         <Differentiation />
         <Framework />
-        <BetaForm />
+        <NewsletterSection />
         <FAQ />
         <FinalCTA />
       </main>

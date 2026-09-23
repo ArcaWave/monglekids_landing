@@ -1,8 +1,7 @@
 /**
  * Newsletter subscription via our Vercel serverless function.
  *
- * Unlike the waitlist (which posts straight to Supabase with the anon
- * key), subscriptions go through POST /api/subscribe so the server can
+ * Subscriptions go through POST /api/subscribe so the server can
  * send the Resend welcome email and write with the service-role key.
  * The subscribers table has no anon RLS policies at all.
  */
