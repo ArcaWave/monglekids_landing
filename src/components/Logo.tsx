@@ -11,7 +11,7 @@ type Props = {
   className?: string;
 };
 
-export default function Logo({ className = "h-12 md:h-14" }: Props) {
+export default function Logo({ className = "h-[52px] md:h-[70px]" }: Props) {
   const { lang } = useLang();
   const isEn = lang === "en";
   return (

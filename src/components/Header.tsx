@@ -64,7 +64,7 @@ export default function Header() {
           : "border-b border-transparent bg-transparent",
       ].join(" ")}
     >
-      <div className="container-page flex h-16 items-center justify-between md:h-[72px]">
+      <div className="container-page flex h-[68px] items-center justify-between md:h-[84px]">
         <Link
           to="/"
           aria-label={t.nav.home}

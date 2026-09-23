@@ -10,7 +10,7 @@ export default function Footer() {
       <div className="container-page py-12">
         <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
           <div>
-            <Logo className="h-16" />
+            <Logo className="h-20" />
             <p className="mt-3 max-w-sm text-[13.5px] leading-relaxed text-ink-600">
               {t.footer.tagline}
             </p>

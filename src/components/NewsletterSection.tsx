@@ -13,7 +13,7 @@ export default function NewsletterSection() {
   const n = t.newsletter;
 
   return (
-    <section id="newsletter" className="relative scroll-mt-20 py-20 md:py-28">
+    <section id="newsletter" className="relative scroll-mt-24 py-20 md:py-28">
       <div className="blob -left-10 top-10 h-72 w-72 bg-peach-200" />
       <div className="blob -right-10 bottom-10 h-72 w-72 bg-grape-200" />
 

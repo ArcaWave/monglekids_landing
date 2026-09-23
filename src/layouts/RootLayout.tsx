@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { LanguageProvider } from "../i18n/LanguageContext";
+import { HEADER_OFFSET } from "../lib/useScrollToSection";
 
 /**
  * Root layout. Wraps every page with the language context.
@@ -35,7 +36,7 @@ function ScrollManager() {
       const handle = window.setTimeout(() => {
         const el = document.getElementById(id);
         if (!el) return;
-        const top = el.getBoundingClientRect().top + window.scrollY - 72;
+        const top = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
         window.scrollTo({ top, behavior: "smooth" });
       }, 80);
       return () => window.clearTimeout(handle);
