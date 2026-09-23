@@ -9,7 +9,7 @@ import { useDownloadCta } from "../lib/useDownloadCta";
 
 /**
  * The top nav. Every item jumps to a section of the home page
- * (`#why`, `#experience`, `#report`, `#newsletter`). Section links work from any page — `useScrollToSection` will navigate
+ * (`#experience`, `#report`, `#faq`, `#newsletter`). Section links work from any page — `useScrollToSection` will navigate
  * home first if needed.
  */
 export default function Header() {
@@ -25,10 +25,10 @@ export default function Header() {
     | { kind: "section"; id: string; label: string };
 
   const NAV: NavItem[] = [
-    { kind: "section", id: "why", label: t.nav.why },
-    { kind: "section", id: "experience", label: t.nav.experience },
+    { kind: "section", id: "experience", label: t.nav.play },
     { kind: "section", id: "report", label: t.nav.report },
-    { kind: "section", id: "newsletter", label: t.nav.news },
+    { kind: "section", id: "newsletter", label: t.nav.subscribe },
+    { kind: "section", id: "faq", label: t.nav.faq },
   ];
 
   useEffect(() => {

@@ -8,7 +8,7 @@ export default function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="relative py-20 md:py-28">
+    <section id="faq" className="relative scroll-mt-24 py-20 md:py-28">
       <div className="container-page">
         <SectionHeader
           eyebrow={t.faq.eyebrow}
