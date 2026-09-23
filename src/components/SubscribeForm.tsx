@@ -215,15 +215,19 @@ export default function SubscribeForm({ bare = false }: { bare?: boolean } = {})
 
   return (
     <div className={bare ? "" : "rounded-[28px] bg-white p-6 ring-1 ring-grape-100/70 clay-shadow sm:p-8"}>
-      <span className="font-display inline-flex items-center gap-2 rounded-full bg-grape-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-grape-700 ring-1 ring-grape-100">
-        <Sparkles className="h-3.5 w-3.5" /> {c.eyebrow}
-      </span>
-      <h2 className="mt-3 text-[24px] font-bold tracking-tight text-ink-900 sm:text-[26px]">
-        {c.title}
-      </h2>
-      <p className="mt-1.5 text-[14.5px] leading-relaxed text-ink-600">{c.sub}</p>
+      {!bare && (
+        <>
+          <span className="font-display inline-flex items-center gap-2 rounded-full bg-grape-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-grape-700 ring-1 ring-grape-100">
+            <Sparkles className="h-3.5 w-3.5" /> {c.eyebrow}
+          </span>
+          <h2 className="mt-3 text-[24px] font-bold tracking-tight text-ink-900 sm:text-[26px]">
+            {c.title}
+          </h2>
+          <p className="mt-1.5 text-[14.5px] leading-relaxed text-ink-600">{c.sub}</p>
+        </>
+      )}
 
-      <form onSubmit={onSubmit} className="mt-6 space-y-4" noValidate>
+      <form onSubmit={onSubmit} className={bare ? "space-y-4" : "mt-6 space-y-4"} noValidate>
         {/* Email — the one field that matters */}
         <label className="block">
           <span className="mb-1.5 flex items-center justify-between">

@@ -1,13 +1,8 @@
 import Header from "../components/Header";
 import Hero from "../components/Hero";
-import Problem from "../components/Problem";
 import EnergyGap from "../components/EnergyGap";
-import Shift from "../components/Shift";
-import Solution from "../components/Solution";
-import Experience from "../components/Experience";
-import ParentValue from "../components/ParentValue";
-import Differentiation from "../components/Differentiation";
-import Framework from "../components/Framework";
+import Play from "../components/Play";
+import Report from "../components/Report";
 import NewsletterSection from "../components/NewsletterSection";
 import FAQ from "../components/FAQ";
 import FinalCTA from "../components/FinalCTA";
@@ -62,14 +57,9 @@ export default function HomePage() {
       <Header />
       <main>
         <Hero />
-        <Problem />
         <EnergyGap />
-        <Shift />
-        <Solution />
-        <Experience />
-        <ParentValue />
-        <Differentiation />
-        <Framework />
+        <Play />
+        <Report />
         <NewsletterSection />
         <FAQ />
         <FinalCTA />

@@ -104,6 +104,9 @@
 
   body {
     font-family: var(--font-sans);
+    /* Korean: wrap between words, not in the middle of one */
+    word-break: keep-all;
+    overflow-wrap: break-word;
     color: var(--color-ink-700);
     background-color: var(--color-cream-50);
     background-image:

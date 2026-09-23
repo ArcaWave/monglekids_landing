@@ -23,9 +23,6 @@ export default function Footer() {
             <Link className="transition hover:text-grape-700" to="/about">
               {t.footer.nav.about}
             </Link>
-            <Link className="transition hover:text-grape-700" to="/#newsletter">
-              {t.footer.nav.newsletter}
-            </Link>
             <Link className="transition hover:text-grape-700" to="/method">
               {t.footer.nav.experience}
             </Link>

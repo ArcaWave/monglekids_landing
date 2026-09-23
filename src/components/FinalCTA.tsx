@@ -1,13 +1,11 @@
-import { ArrowRight, Sparkles } from "lucide-react";
 import Cloud from "./Cloud";
 import CloudScape from "./CloudScape";
 import { useLang, withBreaks } from "../i18n/LanguageContext";
-import { useDownloadCta } from "../lib/useDownloadCta";
+import StoreBadges from "./StoreBadges";
 
 export default function FinalCTA() {
   const { t } = useLang();
   const f = t.finalCta;
-  const download = useDownloadCta();
   return (
     <section className="relative px-5 pb-20 md:pb-28">
       <div className="container-page">
@@ -62,29 +60,19 @@ export default function FinalCTA() {
           </div>
 
           <div className="relative">
-            <span className="font-display inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-[11.5px] font-semibold uppercase tracking-[0.16em] text-grape-700 ring-1 ring-white/80 backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5" /> {f.chip}
-            </span>
-            <h2 className="mt-5 text-balance text-[28px] font-bold leading-[1.25] tracking-tight text-ink-900 sm:text-[36px] md:text-[44px]">
+            <img
+              src="/brand/moongi.png"
+              alt=""
+              aria-hidden
+              draggable={false}
+              className="animate-float-slow mx-auto h-20 w-20 select-none object-contain md:h-24 md:w-24"
+            />
+            <h2 className="mt-4 text-balance text-[28px] font-bold leading-[1.25] tracking-tight text-ink-900 sm:text-[36px] md:text-[44px]">
               {withBreaks(f.titlePre)}
               <span className="text-grape-700">{f.titleHighlight}</span>
             </h2>
-            <p className="mx-auto mt-5 max-w-md text-balance text-[15.5px] leading-relaxed text-ink-600">
-              {f.body}
-            </p>
 
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <button
-                onClick={download}
-                className="group inline-flex items-center justify-center gap-2 rounded-full bg-grape-700 px-7 py-4 text-[15px] font-semibold text-white transition hover:bg-grape-800 clay-shadow"
-              >
-                {f.cta}
-                <ArrowRight className="h-4.5 w-4.5 transition-transform group-hover:translate-x-1" />
-              </button>
-              <span className="text-[12.5px] text-ink-600">
-                {f.note}
-              </span>
-            </div>
+            <StoreBadges className="mt-8 justify-center" />
           </div>
         </div>
       </div>

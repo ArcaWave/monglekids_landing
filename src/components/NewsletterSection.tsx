@@ -1,4 +1,5 @@
-import { CheckCircle2, Mail, Sparkles } from "lucide-react";
+import { ArrowRight, CheckCircle2, Mail, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 import Cloud from "./Cloud";
 import SubscribeForm from "./SubscribeForm";
 import { useLang, withBreaks } from "../i18n/LanguageContext";
@@ -65,10 +66,18 @@ export default function NewsletterSection() {
                 </span>
                 <p className="text-[12.5px] leading-relaxed text-ink-700">{n.note}</p>
               </div>
+
+              <Link
+                to="/news"
+                className="group mt-5 inline-flex items-center gap-1.5 text-[13.5px] font-semibold text-grape-700 transition hover:text-grape-800"
+              >
+                {n.archive}
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
             </div>
           </aside>
 
-          <div className="p-8 md:p-10 lg:col-span-7">
+          <div className="flex flex-col justify-center p-8 md:p-10 lg:col-span-7">
             <SubscribeForm bare />
           </div>
         </div>

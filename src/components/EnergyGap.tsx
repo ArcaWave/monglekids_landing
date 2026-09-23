@@ -1,127 +1,83 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { RotateCcw, Pause } from "lucide-react";
+import { Pause, Play, RotateCcw } from "lucide-react";
 import SectionHeader from "./SectionHeader";
 import { useLang } from "../i18n/LanguageContext";
 
 /**
- * EnergyGap — "the evening, as a storybook scene."
+ * EnergyGap — one evening, parent vs. child energy.
  *
- * Instead of a dashboard chart, the evening plays out inside a sky that
- * actually sets: late-afternoon powder blue melts into golden hour, dusk,
- * and a starry night as time advances. Two thick clay curves draw
- * themselves as the scrubber passes, the sun sinks, the moon rises, and
- * Moongi walks along the timeline as the drag handle. One short cinematic
- * sweep (~3.5 s) plays on first view, then the user explores.
+ * Two batteries say the state at a glance; the chart underneath shows
+ * the whole evening: the space between the lines is the gap, it widens
+ * at dinner time, and closes once the child falls asleep. Inside the
+ * MongleKids moments the gap turns yellow and Moongi pops in.
+ *
+ * The SVG is drawn at the container's real pixel width (not a scaled
+ * viewBox), so labels stay readable on phones.
  */
 
-/* ---------------- geometry ---------------- */
+/* ---------------- data ---------------- */
 
 const X0 = 16; // 4 PM
 const X1 = 22; // 10 PM
-const REST_T = 18.5;
-const W = 840;
-const H = 340;
-const PAD_L = 16;
-const PAD_R = 16;
-const PAD_B = 46;
+const REST_T = 18.6; // where the intro stops: the widest gap
 
-const SKY = { x: 8, y: 8, w: W - 16, h: H - PAD_B - 16, rx: 24 };
-const HORIZON = SKY.y + SKY.h;
+type Pts = [number, number][];
 
-const xOf = (h: number) => PAD_L + ((h - X0) / (X1 - X0)) * (W - PAD_L - PAD_R);
-const yOf = (e: number) => SKY.y + 26 + (1 - e) * (SKY.h - 48);
-
-const PARENT_PTS: [number, number][] = [
-  [16, 0.55], [17, 0.42], [18, 0.27], [18.8, 0.33], [19.5, 0.29],
-  [20, 0.23], [21, 0.2], [22, 0.13],
+const PARENT_PTS: Pts = [
+  [16, 0.62], [17, 0.46], [18, 0.3], [18.6, 0.22], [19.5, 0.25],
+  [20.5, 0.22], [21.5, 0.3], [22, 0.31],
 ];
-const CHILD_PTS: [number, number][] = [
-  [16, 0.92], [17, 0.86], [18, 0.8], [19, 0.84], [20, 0.85],
-  [21, 0.68], [22, 0.36],
+const CHILD_PTS: Pts = [
+  [16, 0.9], [17, 0.86], [18, 0.88], [18.6, 0.9], [19.5, 0.83],
+  [20.5, 0.66], [21.3, 0.34], [22, 0.18],
 ];
 
-function energyAt(pts: [number, number][], h: number): number {
-  if (h <= pts[0][0]) return pts[0][1];
-  for (let i = 0; i < pts.length - 1; i++) {
-    const [x1, y1] = pts[i];
-    const [x2, y2] = pts[i + 1];
-    if (h >= x1 && h <= x2) {
-      const r = (h - x1) / (x2 - x1);
-      const s = r * r * (3 - 2 * r);
-      return y1 + (y2 - y1) * s;
+/** Monotone cubic interpolation (Fritsch–Carlson): smooth, no overshoot. */
+function monotone(pts: Pts): (x: number) => number {
+  const xs = pts.map((p) => p[0]);
+  const ys = pts.map((p) => p[1]);
+  const n = pts.length;
+  const d = xs.slice(0, -1).map((_, i) => (ys[i + 1] - ys[i]) / (xs[i + 1] - xs[i]));
+  const m = new Array<number>(n);
+  m[0] = d[0];
+  m[n - 1] = d[n - 2];
+  for (let i = 1; i < n - 1; i++) m[i] = d[i - 1] * d[i] <= 0 ? 0 : (d[i - 1] + d[i]) / 2;
+  for (let i = 0; i < n - 1; i++) {
+    if (d[i] === 0) {
+      m[i] = m[i + 1] = 0;
+      continue;
+    }
+    const a = m[i] / d[i];
+    const b = m[i + 1] / d[i];
+    const s = a * a + b * b;
+    if (s > 9) {
+      const k = 3 / Math.sqrt(s);
+      m[i] = k * a * d[i];
+      m[i + 1] = k * b * d[i];
     }
   }
-  return pts[pts.length - 1][1];
+  return (x) => {
+    if (x <= xs[0]) return ys[0];
+    if (x >= xs[n - 1]) return ys[n - 1];
+    let i = 0;
+    while (x > xs[i + 1]) i++;
+    const h = xs[i + 1] - xs[i];
+    const t = (x - xs[i]) / h;
+    const t2 = t * t;
+    const t3 = t2 * t;
+    return (
+      (2 * t3 - 3 * t2 + 1) * ys[i] +
+      (t3 - 2 * t2 + t) * h * m[i] +
+      (-2 * t3 + 3 * t2) * ys[i + 1] +
+      (t3 - t2) * h * m[i + 1]
+    );
+  };
 }
 
-function smoothPath(pts: [number, number][]): string {
-  if (pts.length < 2) return "";
-  let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
-  for (let i = 0; i < pts.length - 1; i++) {
-    const p0 = pts[Math.max(0, i - 1)];
-    const p1 = pts[i];
-    const p2 = pts[i + 1];
-    const p3 = pts[Math.min(pts.length - 1, i + 2)];
-    const c1x = p1[0] + (p2[0] - p0[0]) / 6;
-    const c1y = p1[1] + (p2[1] - p0[1]) / 6;
-    const c2x = p2[0] - (p3[0] - p1[0]) / 6;
-    const c2y = p2[1] - (p3[1] - p1[1]) / 6;
-    d += `C${c1x.toFixed(1)},${c1y.toFixed(1)},${c2x.toFixed(1)},${c2y.toFixed(1)},${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
-  }
-  return d;
-}
+const parentAt = monotone(PARENT_PTS);
+const childAt = monotone(CHILD_PTS);
 
-const toPx = (pts: [number, number][]): [number, number][] =>
-  pts.map(([h, e]) => [xOf(h), yOf(e)]);
-
-/* ---------------- sky ---------------- */
-
-const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
-const lerp = (a: number, b: number, p: number) => a + (b - a) * p;
-
-function hexToRgb(hex: string): [number, number, number] {
-  const n = parseInt(hex.slice(1), 16);
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-}
-function lerpColor(a: string, b: string, p: number): string {
-  const ra = hexToRgb(a);
-  const rb = hexToRgb(b);
-  return `rgb(${Math.round(lerp(ra[0], rb[0], p))},${Math.round(lerp(ra[1], rb[1], p))},${Math.round(lerp(ra[2], rb[2], p))})`;
-}
-
-/** [hour, skyTop, skyBottom] — afternoon → golden hour → dusk → night */
-const SKY_KEYS: [number, string, string][] = [
-  [16, "#dff0f4", "#fdf4e4"],
-  [18, "#fae3c6", "#fbd9c9"],
-  [19.5, "#cfd5e3", "#f3d8cd"],
-  [22, "#9db1c9", "#dcc9c5"],
-];
-
-function skyAt(t: number): { top: string; bottom: string } {
-  for (let i = 0; i < SKY_KEYS.length - 1; i++) {
-    const [h1, t1, b1] = SKY_KEYS[i];
-    const [h2, t2, b2] = SKY_KEYS[i + 1];
-    if (t >= h1 && t <= h2) {
-      const p = (t - h1) / (h2 - h1);
-      return { top: lerpColor(t1, t2, p), bottom: lerpColor(b1, b2, p) };
-    }
-  }
-  const last = SKY_KEYS[SKY_KEYS.length - 1];
-  return { top: last[1], bottom: last[2] };
-}
-
-const STARS: { x: number; y: number; s: number; d: number }[] = [
-  { x: xOf(16.9), y: 56, s: 2.4, d: 0 },
-  { x: xOf(17.9), y: 40, s: 1.8, d: 0.5 },
-  { x: xOf(18.8), y: 64, s: 2.2, d: 1.1 },
-  { x: xOf(19.7), y: 38, s: 2.8, d: 0.3 },
-  { x: xOf(20.4), y: 72, s: 1.8, d: 0.8 },
-  { x: xOf(21), y: 46, s: 2.4, d: 1.4 },
-  { x: xOf(21.6), y: 60, s: 2, d: 0.2 },
-];
-
-const sparkle = (cx: number, cy: number, s: number) =>
-  `M${cx},${cy - s} Q${cx + s * 0.22},${cy - s * 0.22} ${cx + s},${cy} Q${cx + s * 0.22},${cy + s * 0.22} ${cx},${cy + s} Q${cx - s * 0.22},${cy + s * 0.22} ${cx - s},${cy} Q${cx - s * 0.22},${cy - s * 0.22} ${cx},${cy - s} Z`;
+const SAMPLES = Array.from({ length: 121 }, (_, i) => X0 + (i * (X1 - X0)) / 120);
 
 /* ---------------- copy ---------------- */
 
@@ -129,20 +85,20 @@ type Activity = { from: number; emoji: string; ko: string; en: string };
 
 const PARENT_DAY: Activity[] = [
   { from: 16, emoji: "💻", ko: "업무 마무리", en: "Wrapping up work" },
-  { from: 17, emoji: "🚇", ko: "퇴근길 — 이미 방전", en: "Commute home — already drained" },
-  { from: 18, emoji: "🍳", ko: "저녁 준비 — 두 번째 출근", en: "Dinner prep — the second shift" },
-  { from: 19, emoji: "🍽️", ko: "저녁 식사 · 설거지", en: "Dinner & dishes" },
-  { from: 20, emoji: "🛁", ko: "재우기 준비", en: "Bedtime routine" },
-  { from: 21, emoji: "🛋️", ko: "드디어 나의 시간…", en: "Finally, me-time…" },
+  { from: 17, emoji: "🚇", ko: "퇴근길", en: "Commute home" },
+  { from: 18, emoji: "🍳", ko: "저녁 준비", en: "Making dinner" },
+  { from: 19, emoji: "🍽️", ko: "저녁 먹고 설거지", en: "Dinner and dishes" },
+  { from: 20, emoji: "🛁", ko: "씻기고 재울 준비", en: "Bath and bedtime" },
+  { from: 21.3, emoji: "🛋️", ko: "드디어 쉬는 시간", en: "Finally, a break" },
 ];
 
 const CHILD_DAY: Activity[] = [
-  { from: 16, emoji: "⚽", ko: "하원 — 에너지 최고조!", en: "School's out — peak energy!" },
-  { from: 17, emoji: "🍪", ko: "간식 먹고 또 놀 준비", en: "Snack, then ready for more" },
-  { from: 18, emoji: "🙋", ko: "“엄마, 놀아줘!”", en: "“Mom, play with me!”" },
-  { from: 19, emoji: "✨", ko: "아직 쌩쌩해요", en: "Still wide awake" },
-  { from: 20, emoji: "🌙", ko: "“한 번만 더!”", en: "“Just one more!”" },
-  { from: 21.3, emoji: "😴", ko: "꿈나라로", en: "Off to dreamland" },
+  { from: 16, emoji: "⚽", ko: "하원, 신나요!", en: "Out of school, buzzing!" },
+  { from: 17, emoji: "🍪", ko: "간식 먹고 또 놀기", en: "Snack, then more play" },
+  { from: 18, emoji: "🙋", ko: "“엄마, 놀아줘!”", en: "“Play with me!”" },
+  { from: 19.5, emoji: "✨", ko: "아직 쌩쌩해요", en: "Still wide awake" },
+  { from: 20.3, emoji: "🌙", ko: "“한 번만 더!”", en: "“Just one more!”" },
+  { from: 21.3, emoji: "😴", ko: "쿨쿨", en: "Fast asleep" },
 ];
 
 const activityAt = (day: Activity[], h: number): Activity => {
@@ -151,87 +107,97 @@ const activityAt = (day: Activity[], h: number): Activity => {
   return cur;
 };
 
-type Win = {
+type Moment = {
   from: number;
   to: number;
   emoji: string;
-  titleKo: string;
-  titleEn: string;
-  timeKo: string;
-  timeEn: string;
-  bodyKo: string;
-  bodyEn: string;
+  /** who Moongi is with during this moment */
+  with: "child" | "parent";
+  ko: { label: string; bubble: string; line: string };
+  en: { label: string; bubble: string; line: string };
 };
 
-const WINDOWS: Win[] = [
+const MOMENTS: Moment[] = [
   {
-    from: 18, to: 19, emoji: "⏰",
-    titleKo: "저녁 준비 시간", titleEn: "Dinner-prep window",
-    timeKo: "오후 6–7시", timeEn: "6–7 PM",
-    bodyKo: "요리하고 설거지하는 사이 “놀아줘”가 들려오는 시간. 아이는 뭉이와 오늘의 놀이를 시작해요.",
-    bodyEn: "Cooking with one hand, hearing “play with me!” — that's when Moongi starts today's play.",
+    from: 18, to: 19, emoji: "🍳", with: "child",
+    ko: { label: "저녁 준비할 때", bubble: "같이 놀자!", line: "뭉이가 아이와 놀아줘요" },
+    en: { label: "While you cook", bubble: "Let's play!", line: "Moongi plays with your child" },
   },
   {
-    from: 20, to: 21, emoji: "🌙",
-    titleKo: "자기 전 창작 시간", titleEn: "Before-bed creation",
-    timeKo: "오후 8–9시", timeEn: "8–9 PM",
-    bodyKo: "하루의 마지막 고비. 영상 대신, 아이가 직접 만든 이야기로 차분하게 하루를 정리해요.",
-    bodyEn: "The day's last stretch. Instead of a video, your child winds down with a story they made.",
+    from: 20, to: 21, emoji: "🌙", with: "child",
+    ko: { label: "자기 전", bubble: "오늘 이야기 만들까?", line: "영상 대신 직접 만든 이야기로 마무리해요" },
+    en: { label: "Before bed", bubble: "Make a story?", line: "The day ends with a story they made" },
   },
   {
-    from: 21, to: 21.8, emoji: "💛",
-    titleKo: "하루 회고 시간", titleEn: "Day-recap moment",
-    timeKo: "오후 9시 무렵", timeEn: "around 9 PM",
-    bodyKo: "아이가 잠든 뒤, 오늘 아이가 무엇을 만들고 어떤 말을 했는지 리포트로 확인해요.",
-    bodyEn: "Once they're asleep, see what they made and said today in your parent report.",
+    from: 21.3, to: 22, emoji: "💛", with: "parent",
+    ko: { label: "아이가 잠든 뒤", bubble: "오늘의 리포트 💛", line: "오늘 아이가 한 말을 리포트로 읽어요" },
+    en: { label: "After they sleep", bubble: "Today's report 💛", line: "Read what your child said today" },
   },
 ];
 
 const COPY = {
   ko: {
-    eyebrow: "THE EVENING GAP",
+    eyebrow: "저녁 6시",
     titlePre: "부모는 쉬고 싶고, ",
-    titleHighlight: "아이는 더 놀고 싶습니다.",
-    description:
-      "퇴근 후 저녁은 하루 중 에너지 격차가 가장 큰 시간이에요. 결국 영상을 틀어주고 마음 한켠이 불편했다면 — 그 30분을 바꿔드릴게요.",
-    parentLabel: "부모",
-    childLabel: "아이",
-    insight: "부모에게는 죄책감 없는 30분, 아이에게는 의미 있는 몰입.",
-    sliderAria: "저녁 시간 이동",
-    replayAria: "다시 재생",
-    pauseAria: "일시 정지",
-    am: "오전",
-    pm: "오후",
+    titleHighlight: "아이는 더 놀고 싶어요.",
+    description: "저녁 준비하다 결국 영상을 틀어준 날, 있으시죠? 그 시간을 뭉이가 맡을게요.",
+    parent: "부모",
+    child: "아이",
+    parentLine: "부모 에너지",
+    childLine: "아이 에너지",
+    gap: "에너지 차이",
+    parentState: ["방전 직전", "지쳐가요", "괜찮아요"],
+    childState: ["쿨쿨", "졸려요", "아직 쌩쌩", "에너지 가득"],
+    gapWide: "차이가 가장 크게 벌어지는 시간",
+    gapGrowing: "차이가 점점 벌어져요",
+    gapShrinking: "차이가 줄어들어요",
+    gapClosed: "아이는 꿈나라, 차이 끝",
+    hour: (h: number) => `${h - 12}시`,
+    time: (hh: number, mm: number) => `오후 ${hh - 12}시${mm ? ` ${mm}분` : ""}`,
+    play: "재생",
+    pause: "일시 정지",
+    replay: "처음부터 다시",
+    slider: "시간 옮기기",
+    chartAria:
+      "오후 4시부터 10시까지 부모와 아이의 에너지 그래프. 저녁 준비 시간에 차이가 가장 크고, 아이가 잠들면 차이가 사라져요.",
   },
   en: {
-    eyebrow: "THE EVENING GAP",
-    titlePre: "Parents are running on empty. ",
-    titleHighlight: "Kids are still full of play.",
-    description:
-      "After-work evenings hold the day's biggest energy gap. If you've ever handed over a screen and felt that little pang of guilt — this half hour can be different.",
-    parentLabel: "Parent",
-    childLabel: "Child",
-    insight: "Thirty guilt-free minutes for you. Real, meaningful focus for them.",
-    sliderAria: "Scrub through the evening",
-    replayAria: "Replay",
-    pauseAria: "Pause",
-    am: "AM",
-    pm: "PM",
+    eyebrow: "6 PM",
+    titlePre: "You're running on empty. ",
+    titleHighlight: "They want to keep playing.",
+    description: "Ever put on a video just to get dinner done? Let Moongi take that half hour.",
+    parent: "Parent",
+    child: "Child",
+    parentLine: "Parent energy",
+    childLine: "Child energy",
+    gap: "Energy gap",
+    parentState: ["Running on empty", "Getting tired", "Doing okay"],
+    childState: ["Asleep", "Sleepy", "Still going", "Full of energy"],
+    gapWide: "The gap is at its widest",
+    gapGrowing: "The gap keeps growing",
+    gapShrinking: "The gap is closing",
+    gapClosed: "They're asleep. Gap closed.",
+    hour: (h: number) => `${h - 12}PM`,
+    time: (hh: number, mm: number) => `${hh - 12}:${String(mm).padStart(2, "0")} PM`,
+    play: "Play",
+    pause: "Pause",
+    replay: "Replay",
+    slider: "Move through the evening",
+    chartAria:
+      "Parent and child energy from 4 PM to 10 PM. The gap is widest while dinner is being made and closes once the child falls asleep.",
   },
 } as const;
 
-function formatTime(
-  h: number,
-  lang: "ko" | "en",
-  c: { am: string; pm: string },
-): string {
-  const hh = Math.floor(h);
-  const mm = Math.round((h - hh) * 60);
-  const isPm = hh >= 12;
-  const h12 = hh > 12 ? hh - 12 : hh;
-  return lang === "ko"
-    ? `${isPm ? c.pm : c.am} ${h12}시${mm > 0 ? ` ${mm}분` : ""}`
-    : `${h12}:${String(mm).padStart(2, "0")} ${isPm ? c.pm : c.am}`;
+const PARENT_C = "#e39a8a";
+const PARENT_DARK = "#c4705f";
+const CHILD_C = "#6aa7b2";
+const CHILD_DARK = "#43838f";
+
+function parentState(e: number): number {
+  return e < 0.3 ? 0 : e < 0.45 ? 1 : 2;
+}
+function childState(e: number): number {
+  return e < 0.3 ? 0 : e < 0.5 ? 1 : e < 0.8 ? 2 : 3;
 }
 
 /* ---------------- component ---------------- */
@@ -240,48 +206,59 @@ export default function EnergyGap() {
   const { lang } = useLang();
   const c = COPY[lang];
 
-  const [t, setT] = useState(X0);
-  const [sweeping, setSweeping] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
-  const rafRef = useRef(0);
-  const playedRef = useRef(false);
+  const [t, setT] = useState(REST_T);
+  const [drawn, setDrawn] = useState(true);
+  const [playing, setPlaying] = useState(false);
+  const [W, setW] = useState(840);
 
-  const cancelSweep = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef(0);
+  const timerRef = useRef(0);
+
+  // Chart width = real container width (so text isn't scaled down).
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(([e]) => setW(Math.max(300, Math.round(e.contentRect.width))));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  const stop = () => {
     cancelAnimationFrame(rafRef.current);
-    setSweeping(false);
+    window.clearTimeout(timerRef.current);
+    setPlaying(false);
   };
 
-  const sweep = () => {
+  /** Animate t from `from` to `to`. */
+  const run = (from: number, to: number, ms: number, ease: boolean) => {
     cancelAnimationFrame(rafRef.current);
-    setSweeping(true);
-    const dur = 3500;
+    setPlaying(true);
     const start = performance.now();
     const step = (now: number) => {
-      const p = Math.min(1, (now - start) / dur);
-      const ease = 1 - Math.pow(1 - p, 3);
-      setT(X0 + (REST_T - X0) * ease);
-      if (p < 1) {
-        rafRef.current = requestAnimationFrame(step);
-      } else {
-        setSweeping(false);
-      }
+      const p = Math.min(1, (now - start) / ms);
+      const k = ease ? 1 - Math.pow(1 - p, 3) : p;
+      setT(from + (to - from) * k);
+      if (p < 1) rafRef.current = requestAnimationFrame(step);
+      else setPlaying(false);
     };
     rafRef.current = requestAnimationFrame(step);
   };
 
+  // First view: lines draw in, then the evening plays up to the widest gap.
   useEffect(() => {
     const el = sectionRef.current;
     if (!el || typeof IntersectionObserver === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    setDrawn(false);
+    setT(X0);
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting || playedRef.current) return;
-        playedRef.current = true;
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-          setT(REST_T);
-        } else {
-          sweep();
-        }
+        if (!entry.isIntersecting) return;
         io.disconnect();
+        setDrawn(true);
+        timerRef.current = window.setTimeout(() => run(X0, REST_T, 2600, true), 1100);
       },
       { threshold: 0.35 },
     );
@@ -289,41 +266,97 @@ export default function EnergyGap() {
     return () => {
       io.disconnect();
       cancelAnimationFrame(rafRef.current);
+      window.clearTimeout(timerRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const scrubTo = (h: number) => {
-    cancelSweep();
+    stop();
+    setDrawn(true);
     setT(Math.min(X1, Math.max(X0, Math.round(h * 20) / 20)));
   };
 
-  const parentE = energyAt(PARENT_PTS, t);
-  const childE = energyAt(CHILD_PTS, t);
-  const gap = childE - parentE;
-  const activeWin = WINDOWS.find((w) => t >= w.from && t <= w.to) ?? null;
+  const togglePlay = () => {
+    if (playing) return stop();
+    const from = t >= X1 - 0.01 ? X0 : t;
+    run(from, X1, (X1 - from) * 1500, false);
+  };
 
-  const parentPath = useMemo(() => smoothPath(toPx(PARENT_PTS)), []);
-  const childPath = useMemo(() => smoothPath(toPx(CHILD_PTS)), []);
-
+  /* ----- values at "now" ----- */
+  const pE = parentAt(t);
+  const cE = childAt(t);
+  const gap = cE - pE;
+  const trend = childAt(Math.min(X1, t + 0.1)) - parentAt(Math.min(X1, t + 0.1)) - gap;
+  const moment = MOMENTS.find((m) => t >= m.from && t <= m.to) ?? null;
   const pa = activityAt(PARENT_DAY, t);
   const ca = activityAt(CHILD_DAY, t);
-  const scrubX = xOf(t);
 
-  const sky = skyAt(t);
-  const night = clamp01((t - 19.3) / 1.6); // star/moon strength
-  const sunP = clamp01((t - 16) / 3.8); // sun sinking progress
-  const sunX = lerp(xOf(16.7), xOf(19.6), sunP);
-  const sunY = lerp(SKY.y + 48, HORIZON + 34, sunP);
-  const moonP = clamp01((t - 19.2) / 1.9);
-  const moonX = lerp(xOf(20), xOf(21.1), moonP);
-  const moonY = lerp(HORIZON + 28, SKY.y + 52, moonP);
+  const status = moment
+    ? `${moment.emoji} ${moment[lang].label} · ${moment[lang].line}`
+    : gap < 0.05
+      ? c.gapClosed
+      : gap >= 0.55
+        ? c.gapWide
+        : trend >= 0
+          ? c.gapGrowing
+          : c.gapShrinking;
+
+  /* ----- geometry (real px) ----- */
+  const narrow = W < 560;
+  const H = narrow ? 300 : 340;
+  const PAD_L = 14;
+  const PAD_R = 14;
+  const TOP = 42;
+  const BOTTOM = H - 76;
+  const xOf = (h: number) => PAD_L + ((h - X0) / (X1 - X0)) * (W - PAD_L - PAD_R);
+  const yOf = (e: number) => TOP + (1 - e) * (BOTTOM - TOP);
+
+  const paths = useMemo(() => {
+    const line = (f: (x: number) => number) =>
+      SAMPLES.map((h, i) => `${i ? "L" : "M"}${xOf(h).toFixed(1)},${yOf(f(h)).toFixed(1)}`).join("");
+    // gap area: child on top going right, parent coming back, until they cross
+    const until = SAMPLES.filter((h) => childAt(h) - parentAt(h) > 0);
+    const area =
+      until.map((h, i) => `${i ? "L" : "M"}${xOf(h).toFixed(1)},${yOf(childAt(h)).toFixed(1)}`).join("") +
+      [...until].reverse().map((h) => `L${xOf(h).toFixed(1)},${yOf(parentAt(h)).toFixed(1)}`).join("") +
+      "Z";
+    return { parent: line(parentAt), child: line(childAt), area };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [W, H]);
+
+  const nowX = xOf(t);
+  const pY = yOf(pE);
+  const cY = yOf(cE);
+
+  const hh = Math.floor(t);
+  const mm = Math.round(((t - hh) * 60) / 5) * 5;
+  const timeText = mm === 60 ? c.time(hh + 1, 0) : c.time(hh, mm);
+  const timeW = lang === "ko" ? 22 + timeText.length * 11 : 20 + timeText.length * 8;
+  const timeX = Math.min(Math.max(nowX, PAD_L + timeW / 2), W - PAD_R - timeW / 2);
+
+  // gap label sits in the gap early in the evening, clear of Moongi at rest
+  const labelH = 17.1;
+  const labelY = (yOf(childAt(labelH)) + yOf(parentAt(labelH))) / 2;
+
+  // Moongi + bubble
+  const mSize = narrow ? 40 : 48;
+  const mX = Math.min(Math.max(nowX, PAD_L + mSize / 2), W - PAD_R - mSize / 2);
+  const mY = moment?.with === "parent" ? pY - mSize - 6 : (cY + pY) / 2 - mSize / 2;
+  const bubble = moment ? moment[lang].bubble : "";
+  const bubbleW = lang === "ko" ? 24 + bubble.length * 12 : 22 + bubble.length * 7.4;
+  const bubbleRight = mX + mSize / 2 + 6 + bubbleW <= W - PAD_R;
+  const bubbleX = bubbleRight ? mX + mSize / 2 + 6 : mX - mSize / 2 - 6 - bubbleW;
+
+  const pointerTo = (e: React.PointerEvent<SVGSVGElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    scrubTo(X0 + ((e.clientX - rect.left - PAD_L) / (rect.width - PAD_L - PAD_R)) * (X1 - X0));
+  };
 
   const sliderPct = ((t - X0) / (X1 - X0)) * 100;
-  const axisHours = [16, 17, 18, 19, 20, 21, 22];
 
   return (
-    <section ref={sectionRef} className="relative py-20 md:py-28">
+    <section ref={sectionRef} id="why" className="relative scroll-mt-24 py-20 md:py-28">
       <div className="container-page">
         <SectionHeader
           eyebrow={c.eyebrow}
@@ -336,289 +369,263 @@ export default function EnergyGap() {
           description={c.description}
         />
 
-        <div className="mx-auto mt-12 max-w-5xl">
-          {/* Scene card */}
-          <div className="relative rounded-[32px] bg-white p-3 ring-1 ring-grape-100/70 clay-shadow sm:p-4">
-            {/* Replay — floats over the sky */}
-            <button
-              type="button"
-              onClick={() => (sweeping ? cancelSweep() : sweep())}
-              aria-label={sweeping ? c.pauseAria : c.replayAria}
-              className="absolute right-6 top-6 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/80 text-ink-700 ring-1 ring-white backdrop-blur transition hover:bg-white clay-shadow-sm"
-            >
-              {sweeping ? <Pause className="h-4 w-4" /> : <RotateCcw className="h-4 w-4" />}
-            </button>
+        <div className="mx-auto mt-12 max-w-5xl rounded-[32px] bg-white p-4 ring-1 ring-grape-100/70 clay-shadow sm:p-6">
+          {/* Two batteries: the state right now */}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <Person
+              label={c.parent}
+              state={c.parentState[parentState(pE)]}
+              level={pE}
+              color={PARENT_C}
+              dark={PARENT_DARK}
+              tint="bg-rose-100/60"
+              activity={pa}
+              lang={lang}
+            />
+            <Person
+              label={c.child}
+              state={c.childState[childState(cE)]}
+              level={cE}
+              color={CHILD_C}
+              dark={CHILD_DARK}
+              tint="bg-sky-100/70"
+              activity={ca}
+              lang={lang}
+            />
+          </div>
 
+          <p
+            aria-live="polite"
+            className={[
+              "mt-3 rounded-2xl px-4 py-2.5 text-center text-[13.5px] font-semibold transition-colors",
+              moment
+                ? "bg-sun-100 text-ink-900 ring-1 ring-sun-300"
+                : "bg-cream-100/80 text-ink-700 ring-1 ring-grape-100/70",
+            ].join(" ")}
+          >
+            {status}
+          </p>
+
+          {/* Legend */}
+          <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 px-1 text-[12.5px] font-semibold text-ink-600">
+            <span className="inline-flex items-center gap-1.5">
+              <span className="h-[3px] w-5 rounded-full" style={{ background: CHILD_C }} /> {c.childLine}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <span className="h-[3px] w-5 rounded-full" style={{ background: PARENT_C }} /> {c.parentLine}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <span className="h-3 w-3 rounded-[4px] bg-[#f7d9c9]" /> {c.gap}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <img src="/brand/moongi.png" alt="" aria-hidden className="h-4 w-4 object-contain" /> {lang === "ko" ? "몽글키즈 시간" : "MongleKids time"}
+            </span>
+          </div>
+
+          {/* Chart */}
+          <div ref={wrapRef} className="mt-2">
             <svg
+              width={W}
+              height={H}
               viewBox={`0 0 ${W} ${H}`}
-              className="block w-full cursor-grab touch-none select-none active:cursor-grabbing"
-              onPointerDown={(e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                scrubTo(X0 + ((e.clientX - rect.left) / rect.width) * (X1 - X0));
-              }}
-              onPointerMove={(e) => {
-                if (e.buttons !== 1) return;
-                const rect = e.currentTarget.getBoundingClientRect();
-                scrubTo(X0 + ((e.clientX - rect.left) / rect.width) * (X1 - X0));
-              }}
+              role="img"
+              aria-label={c.chartAria}
+              className="block cursor-grab select-none active:cursor-grabbing"
+              style={{ touchAction: "pan-y", maxWidth: "100%" }}
+              onPointerDown={pointerTo}
+              onPointerMove={(e) => e.buttons === 1 && pointerTo(e)}
             >
               <defs>
-                <linearGradient id="eg-sky" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={sky.top} />
-                  <stop offset="100%" stopColor={sky.bottom} />
+                <linearGradient id="eg-bg" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#fdf7ec" />
+                  <stop offset="100%" stopColor="#eef0f6" />
                 </linearGradient>
-                <clipPath id="eg-sky-clip">
-                  <rect x={SKY.x} y={SKY.y} width={SKY.w} height={SKY.h} rx={SKY.rx} />
+                <clipPath id="eg-moments">
+                  {MOMENTS.map((m) => (
+                    <rect key={m.from} x={xOf(m.from)} y={0} width={xOf(m.to) - xOf(m.from)} height={H} />
+                  ))}
                 </clipPath>
-                <clipPath id="eg-past">
-                  <rect x="0" y="0" width={scrubX} height={H} />
-                </clipPath>
-                <filter id="eg-drop" x="-20%" y="-20%" width="140%" height="160%">
-                  <feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#a6694c" floodOpacity="0.25" />
-                </filter>
               </defs>
 
-              {/* ----- the evening sky ----- */}
-              <rect
-                x={SKY.x} y={SKY.y} width={SKY.w} height={SKY.h} rx={SKY.rx}
-                fill="url(#eg-sky)"
-              />
+              {/* plot background: afternoon → night */}
+              <rect x={PAD_L} y={TOP - 14} width={W - PAD_L - PAD_R} height={BOTTOM - TOP + 28} rx={18} fill="url(#eg-bg)" />
+              <text x={PAD_L + 12} y={TOP + 4} fontSize={15} aria-hidden>☀️</text>
+              <text x={W - PAD_R - 12} y={TOP + 4} fontSize={15} textAnchor="end" aria-hidden>🌙</text>
 
-              <g clipPath="url(#eg-sky-clip)">
-                {/* Golden-time bands — bottom layer, tinting the sky */}
-                {WINDOWS.map((w) => {
-                  const active = activeWin === w;
-                  return (
-                    <rect
-                      key={w.from}
-                      x={xOf(w.from)}
-                      y={SKY.y + 10}
-                      width={xOf(w.to) - xOf(w.from)}
-                      height={SKY.h - 20}
-                      rx={16}
-                      className="transition-opacity duration-300"
-                      fill="#faefc9"
-                      opacity={active ? 0.7 : 0.28}
-                      stroke={active ? "#f2dd9b" : "none"}
-                      strokeWidth={active ? 2.5 : 0}
-                    />
-                  );
-                })}
-
-                {/* Stars come out at dusk */}
-                {STARS.map((s, i) => (
-                  <path
-                    key={i}
-                    d={sparkle(s.x, s.y, s.s * 2.6)}
-                    fill="#fff7df"
-                    opacity={night * 0.9}
-                    className="animate-pulse-soft"
-                    style={{ animationDelay: `${s.d}s` }}
-                  />
-                ))}
-
-                {/* Sun sets… */}
-                <g opacity={1 - night * 0.9}>
-                  <circle cx={sunX} cy={sunY} r={30} fill="#f6dd96" opacity={0.45} />
-                  <circle cx={sunX} cy={sunY} r={15} fill="#f2c94c" />
+              {/* the gap, and the MongleKids moments inside it */}
+              <g className="transition-opacity duration-700" style={{ transitionDelay: drawn ? "600ms" : "0ms" }} opacity={drawn ? 1 : 0}>
+                <path d={paths.area} fill="#f7d9c9" opacity={0.75} />
+                <path d={paths.area} fill="#f6df95" opacity={0.85} clipPath="url(#eg-moments)" />
+                <g transform={`translate(${xOf(labelH)},${labelY})`}>
+                  <rect x={-44} y={-12} width={88} height={24} rx={12} fill="#fff" stroke="#f0cdbb" />
+                  <text y={4.5} textAnchor="middle" fontSize={12} fontWeight={700} fill="#8e6a55">
+                    ↕ {c.gap}
+                  </text>
                 </g>
-                {/* …moon rises */}
-                <g opacity={night}>
-                  <circle cx={moonX} cy={moonY} r={24} fill="#fdf3d3" opacity={0.35} />
-                  <circle cx={moonX} cy={moonY} r={13} fill="#fbf0d2" />
-                  <circle cx={moonX - 4} cy={moonY - 3} r={3} fill="#efe2bb" opacity={0.7} />
-                  <circle cx={moonX + 4} cy={moonY + 4} r={2} fill="#efe2bb" opacity={0.6} />
-                </g>
-
-                {/* Drifting clay clouds */}
-                <g className="animate-drift" style={{ transformBox: "fill-box" }} opacity={0.85}>
-                  <path
-                    d="M120 70 C104 70 96 58 104 48 C92 46 94 30 108 29 C104 16 122 8 132 14 C137 1 157 0 162 12 C170 1 190 6 192 21 C207 17 220 27 215 40 C227 42 229 56 219 61 C229 67 222 80 208 76 L120 70 Z"
-                    fill="rgba(255,255,255,0.9)"
-                  />
-                </g>
-                <g className="animate-drift-reverse" style={{ transformBox: "fill-box" }} opacity={0.7}>
-                  <path
-                    d="M640 52 C630 52 624 45 629 38 C622 36 623 26 632 25 C629 17 640 12 646 16 C649 8 661 7 664 15 C669 8 681 11 682 20 C691 17 699 24 696 32 C704 34 705 42 699 46 C705 50 701 58 692 55 L640 52 Z"
-                    fill="rgba(255,255,255,0.8)"
-                  />
-                </g>
-
-                {/* Future curves — a faint promise of where the evening goes */}
-                <path d={parentPath} fill="none" stroke="#e5a496" strokeWidth={7} strokeLinecap="round" opacity={0.22} />
-                <path d={childPath} fill="none" stroke="#7fb1bb" strokeWidth={7} strokeLinecap="round" opacity={0.22} />
-
-                {/* Past curves — thick clay strokes drawn up to "now" */}
-                <g clipPath="url(#eg-past)">
-                  <path d={parentPath} fill="none" stroke="#e5a496" strokeWidth={8} strokeLinecap="round" filter="url(#eg-drop)" />
-                  <path d={childPath} fill="none" stroke="#7fb1bb" strokeWidth={8} strokeLinecap="round" filter="url(#eg-drop)" />
-                </g>
-
-                {/* Gap pulse between the two clay balls */}
-                {gap > 0.25 && (
-                  <g>
-                    <line
-                      x1={scrubX} y1={yOf(parentE) - 12}
-                      x2={scrubX} y2={yOf(childE) + 12}
-                      stroke="#e3c264" strokeWidth={3} strokeDasharray="1 7" strokeLinecap="round"
-                    />
-                    <g className="animate-pulse-soft" style={{ transformBox: "fill-box", transformOrigin: "center" }}>
-                      <circle
-                        cx={scrubX} cy={(yOf(parentE) + yOf(childE)) / 2}
-                        r={13} fill="#fff" stroke="#f2dd9b" strokeWidth={2.5}
-                      />
-                      <text
-                        x={scrubX} y={(yOf(parentE) + yOf(childE)) / 2 + 4.5}
-                        textAnchor="middle" fontSize={13}
-                      >
-                        ⚡
-                      </text>
-                    </g>
-                  </g>
-                )}
-
-                {/* Clay ball markers riding the curves */}
-                <circle cx={scrubX} cy={yOf(parentE)} r={10} fill="#e5a496" stroke="#fff" strokeWidth={3.5} filter="url(#eg-drop)" />
-                <ellipse cx={scrubX - 2.5} cy={yOf(parentE) - 3} rx={3.5} ry={2.5} fill="#fff" opacity={0.55} />
-                <circle cx={scrubX} cy={yOf(childE)} r={10} fill="#7fb1bb" stroke="#fff" strokeWidth={3.5} filter="url(#eg-drop)" />
-                <ellipse cx={scrubX - 2.5} cy={yOf(childE) - 3} rx={3.5} ry={2.5} fill="#fff" opacity={0.55} />
               </g>
 
-              {/* Curve name tags at the right edge */}
-              <g fontSize={12} fontWeight={700}>
-                <rect x={W - 66} y={yOf(energyAt(PARENT_PTS, X1)) - 12} width={50} height={24} rx={12} fill="#e5a496" />
-                <text x={W - 41} y={yOf(energyAt(PARENT_PTS, X1)) + 4} textAnchor="middle" fill="#fff">
-                  {c.parentLabel}
-                </text>
-                <rect x={W - 66} y={yOf(energyAt(CHILD_PTS, X1)) - 12} width={50} height={24} rx={12} fill="#7fb1bb" />
-                <text x={W - 41} y={yOf(energyAt(CHILD_PTS, X1)) + 4} textAnchor="middle" fill="#fff">
-                  {c.childLabel}
-                </text>
-              </g>
-
-              {/* Moongi walks the timeline as the handle */}
-              <g
-                className="animate-float-slow"
-                style={{ transformBox: "fill-box", transformOrigin: "center" }}
-              >
-                <image
-                  href="/brand/moongi.png"
-                  x={Math.min(Math.max(scrubX - 26, SKY.x + 2), W - 62)}
-                  y={HORIZON - 50}
-                  width={56}
-                  height={56}
+              {/* the two lines */}
+              {[
+                { d: paths.child, color: CHILD_C },
+                { d: paths.parent, color: PARENT_C },
+              ].map((l) => (
+                <path
+                  key={l.color}
+                  d={l.d}
+                  fill="none"
+                  stroke={l.color}
+                  strokeWidth={5}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  pathLength={1}
+                  strokeDasharray={1}
+                  strokeDashoffset={drawn ? 0 : 1}
+                  style={{ transition: "stroke-dashoffset 1.2s ease-out" }}
                 />
-                {activeWin && (
-                  <g>
-                    <circle
-                      cx={Math.min(Math.max(scrubX + 26, SKY.x + 54), W - 10)}
-                      cy={HORIZON - 52}
-                      r={13}
-                      fill="#fff"
-                      stroke="#f2dd9b"
-                      strokeWidth={2}
-                    />
-                    <text
-                      x={Math.min(Math.max(scrubX + 26, SKY.x + 54), W - 10)}
-                      y={HORIZON - 47.5}
-                      textAnchor="middle"
-                      fontSize={12}
-                    >
-                      {activeWin.emoji}
+              ))}
+
+              {/* now */}
+              <line x1={nowX} y1={TOP - 14} x2={nowX} y2={BOTTOM + 14} stroke="#b0a18e" strokeWidth={1.5} strokeDasharray="3 5" />
+              <g transform={`translate(${timeX},${TOP - 26})`}>
+                <rect x={-timeW / 2} y={-13} width={timeW} height={24} rx={12} fill="#54473a" />
+                <text y={4} textAnchor="middle" fontSize={12} fontWeight={700} fill="#fff">
+                  {timeText}
+                </text>
+              </g>
+              <circle cx={nowX} cy={cY} r={7} fill={CHILD_C} stroke="#fff" strokeWidth={3} />
+              <circle cx={nowX} cy={pY} r={7} fill={PARENT_C} stroke="#fff" strokeWidth={3} />
+
+              {/* Moongi shows up in the MongleKids moments */}
+              {moment && (
+                <g>
+                  <image href="/brand/moongi.png" x={mX - mSize / 2} y={mY} width={mSize} height={mSize} />
+                  <g transform={`translate(${bubbleX},${mY + 4})`}>
+                    <rect width={bubbleW} height={26} rx={13} fill="#fff" stroke="#f2dd9b" strokeWidth={1.5} />
+                    <text x={bubbleW / 2} y={17.5} textAnchor="middle" fontSize={12.5} fontWeight={700} fill="#54473a">
+                      {bubble}
                     </text>
                   </g>
-                )}
-              </g>
+                </g>
+              )}
 
-              {/* Axis */}
-              {axisHours.map((h) => (
+              {/* hour axis */}
+              {[16, 17, 18, 19, 20, 21, 22].map((h, i, all) => (
                 <text
                   key={h}
                   x={xOf(h)}
-                  y={H - 14}
-                  textAnchor="middle"
-                  fontSize={12.5}
-                  fill="#8e7e6d"
-                  className="font-display"
+                  y={BOTTOM + 34}
+                  textAnchor={i === 0 ? "start" : i === all.length - 1 ? "end" : "middle"}
+                  fontSize={12}
                   fontWeight={600}
+                  fill="#8e7e6d"
                 >
-                  {h - 12}PM
+                  {c.hour(h)}
                 </text>
               ))}
+
+              {/* MongleKids moments along the bottom */}
+              {MOMENTS.map((m) => {
+                const x = xOf(m.from);
+                const w = xOf(m.to) - x;
+                const on = moment === m;
+                const showText = w >= 96;
+                return (
+                  <g
+                    key={m.from}
+                    transform={`translate(${x},${BOTTOM + 46})`}
+                    className="cursor-pointer"
+                    onPointerDown={(e) => {
+                      e.stopPropagation();
+                      scrubTo((m.from + m.to) / 2);
+                    }}
+                  >
+                    <rect width={w} height={26} rx={13} fill={on ? "#f6df95" : "#fbf1d4"} stroke={on ? "#e3c264" : "none"} />
+                    <text x={w / 2} y={17.5} textAnchor="middle" fontSize={12} fontWeight={700} fill="#54473a">
+                      {showText ? `${m.emoji} ${m[lang].label}` : m.emoji}
+                    </text>
+                  </g>
+                );
+              })}
             </svg>
-
-            {/* Live status row */}
-            <div className="mt-1 flex flex-col items-stretch gap-2 px-2 pb-2 sm:flex-row sm:items-center">
-              <div className="tabular inline-flex w-fit items-center rounded-full bg-cream-100 px-3.5 py-1.5 text-[14px] font-bold text-ink-900 ring-1 ring-grape-100">
-                🕕 {formatTime(t, lang, c)}
-              </div>
-              <div className="flex flex-1 flex-wrap gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-100/70 px-3 py-1.5 text-[12.5px] font-medium text-ink-800 ring-1 ring-rose-200/70">
-                  {pa.emoji} {c.parentLabel} · {lang === "ko" ? pa.ko : pa.en}
-                </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-sky-100/80 px-3 py-1.5 text-[12.5px] font-medium text-ink-800 ring-1 ring-sky-200/70">
-                  {ca.emoji} {c.childLabel} · {lang === "ko" ? ca.ko : ca.en}
-                </span>
-              </div>
-            </div>
-
-            {/* Clay slider */}
-            <div className="px-2 pb-2">
-              <input
-                type="range"
-                min={X0}
-                max={X1}
-                step={0.05}
-                value={t}
-                aria-label={c.sliderAria}
-                onChange={(e) => scrubTo(Number(e.target.value))}
-                className="mongle-range w-full"
-                style={{
-                  background: `linear-gradient(to right, #e3c264 0%, #e3c264 ${sliderPct}%, #f0e0c4 ${sliderPct}%, #f0e0c4 100%)`,
-                }}
-              />
-            </div>
           </div>
 
-          {/* Window cards */}
-          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
-            {WINDOWS.map((w) => {
-              const active = activeWin === w;
-              return (
-                <button
-                  key={w.from}
-                  type="button"
-                  onClick={() => scrubTo((w.from + w.to) / 2)}
-                  className={[
-                    "rounded-3xl p-5 text-left transition clay-shadow-sm",
-                    active
-                      ? "bg-sun-100 ring-2 ring-sun-300"
-                      : "bg-white ring-1 ring-grape-100/70 hover:-translate-y-0.5",
-                  ].join(" ")}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-[20px]">{w.emoji}</span>
-                    <span className="font-display text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-400">
-                      {lang === "ko" ? w.timeKo : w.timeEn}
-                    </span>
-                  </div>
-                  <h3 className="mt-3 text-[16px] font-semibold text-ink-900">
-                    {lang === "ko" ? w.titleKo : w.titleEn}
-                  </h3>
-                  <p className="mt-1.5 text-[13.5px] leading-[1.7] text-ink-600">
-                    {lang === "ko" ? w.bodyKo : w.bodyEn}
-                  </p>
-                </button>
-              );
-            })}
+          {/* Controls */}
+          <div className="mt-3 flex items-center gap-3 px-1">
+            <button
+              type="button"
+              onClick={togglePlay}
+              aria-label={playing ? c.pause : t >= X1 - 0.01 ? c.replay : c.play}
+              className="inline-flex h-10 w-10 flex-none items-center justify-center rounded-full bg-grape-700 text-white transition hover:bg-grape-800 clay-shadow-sm"
+            >
+              {playing ? (
+                <Pause className="h-4 w-4" />
+              ) : t >= X1 - 0.01 ? (
+                <RotateCcw className="h-4 w-4" />
+              ) : (
+                <Play className="ml-0.5 h-4 w-4 fill-current" />
+              )}
+            </button>
+            <input
+              type="range"
+              min={X0}
+              max={X1}
+              step={0.05}
+              value={t}
+              aria-label={c.slider}
+              aria-valuetext={timeText}
+              onChange={(e) => scrubTo(Number(e.target.value))}
+              className="mongle-range w-full"
+              style={{
+                background: `linear-gradient(to right, #e3c264 0%, #e3c264 ${sliderPct}%, #f0e0c4 ${sliderPct}%, #f0e0c4 100%)`,
+              }}
+            />
           </div>
-
-          {/* Insight line */}
-          <p className="mt-8 text-center text-[15px] font-semibold text-ink-700">
-            💡 {c.insight}
-          </p>
         </div>
       </div>
     </section>
+  );
+}
+
+function Person({
+  label,
+  state,
+  level,
+  color,
+  dark,
+  tint,
+  activity,
+  lang,
+}: {
+  label: string;
+  state: string;
+  level: number;
+  color: string;
+  dark: string;
+  tint: string;
+  activity: Activity;
+  lang: "ko" | "en";
+}) {
+  const pct = Math.round(Math.max(0.04, Math.min(1, level)) * 100);
+  return (
+    <div className={`flex items-center gap-3 rounded-2xl p-3.5 ${tint}`}>
+      <span className="flex h-12 w-12 flex-none items-center justify-center rounded-2xl bg-white text-[24px] ring-1 ring-white clay-shadow-sm" aria-hidden>
+        {activity.emoji}
+      </span>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-baseline justify-between gap-2">
+          <span className="text-[14px] font-bold text-ink-900">{label}</span>
+          <span className="text-[12.5px] font-bold" style={{ color: dark }}>
+            {state}
+          </span>
+        </div>
+        <div className="mt-1.5 flex items-center gap-1" aria-hidden>
+          <div className="h-[18px] flex-1 rounded-[7px] bg-white p-[3px] ring-1 ring-black/5">
+            <div className="h-full rounded-[4px] transition-[width] duration-150" style={{ width: `${pct}%`, background: color }} />
+          </div>
+          <div className="h-2 w-1 rounded-r-sm bg-white ring-1 ring-black/5" />
+        </div>
+        <p className="mt-1.5 truncate text-[13px] text-ink-600">{lang === "ko" ? activity.ko : activity.en}</p>
+      </div>
+    </div>
   );
 }

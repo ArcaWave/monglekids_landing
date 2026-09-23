@@ -8,9 +8,8 @@ import { useScrollToSection } from "../lib/useScrollToSection";
 import { useDownloadCta } from "../lib/useDownloadCta";
 
 /**
- * The top nav. Some links are real pages (`/about`, `/method`, `/faq`),
- * others jump to a section on the home page (`#newsletter`, `#report`).
- * Section links work from any page — `useScrollToSection` will navigate
+ * The top nav. Every item jumps to a section of the home page
+ * (`#why`, `#experience`, `#report`, `#newsletter`). Section links work from any page — `useScrollToSection` will navigate
  * home first if needed.
  */
 export default function Header() {
@@ -26,11 +25,10 @@ export default function Header() {
     | { kind: "section"; id: string; label: string };
 
   const NAV: NavItem[] = [
-    { kind: "page", to: "/about", label: t.nav.why },
-    { kind: "page", to: "/method", label: t.nav.experience },
+    { kind: "section", id: "why", label: t.nav.why },
+    { kind: "section", id: "experience", label: t.nav.experience },
     { kind: "section", id: "report", label: t.nav.report },
-    { kind: "page", to: "/news", label: t.nav.news },
-    { kind: "section", id: "newsletter", label: t.nav.newsletter },
+    { kind: "section", id: "newsletter", label: t.nav.news },
   ];
 
   useEffect(() => {
@@ -73,13 +71,13 @@ export default function Header() {
           <Logo />
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
           {NAV.map((item) =>
             item.kind === "page" ? (
               <Link
                 key={item.to}
                 to={item.to}
-                className="rounded-full px-3.5 py-2 text-sm font-medium text-ink-700 transition hover:bg-grape-50 hover:text-grape-700"
+                className="whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-medium text-ink-700 transition hover:bg-grape-50 hover:text-grape-700"
               >
                 {item.label}
               </Link>
@@ -87,7 +85,7 @@ export default function Header() {
               <button
                 key={item.id}
                 onClick={() => onSectionClick(item.id)}
-                className="rounded-full px-3.5 py-2 text-sm font-medium text-ink-700 transition hover:bg-grape-50 hover:text-grape-700"
+                className="whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-medium text-ink-700 transition hover:bg-grape-50 hover:text-grape-700"
               >
                 {item.label}
               </button>
@@ -95,18 +93,18 @@ export default function Header() {
           )}
         </nav>
 
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="hidden items-center gap-2 lg:flex">
           <LangToggle />
           <button
             onClick={triggerCta}
-            className="group inline-flex items-center gap-1.5 rounded-full bg-grape-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-grape-800 clay-shadow-sm"
+            className="group inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-grape-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-grape-800 clay-shadow-sm"
           >
             {t.nav.cta}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </button>
         </div>
 
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
           <LangToggle />
           <button
             aria-label={open ? t.nav.close : t.nav.open}
@@ -119,7 +117,7 @@ export default function Header() {
       </div>
 
       {open && (
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <div className="container-page pb-4">
             <div className="flex flex-col gap-1 rounded-2xl bg-white p-2 ring-1 ring-grape-100 clay-shadow-sm">
               {NAV.map((item) =>
