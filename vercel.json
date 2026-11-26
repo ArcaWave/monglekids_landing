@@ -3,10 +3,21 @@
     { "source": "/gallery", "destination": "/gallery/index.html" },
     { "source": "/delete-account", "destination": "/delete-account/index.html" },
 
+    { "source": "/p/:token", "destination": "https://monglekids-report.vercel.app/p/:token" },
     { "source": "/r/:token", "destination": "https://jellying.vercel.app/r/:token" },
-    { "source": "/_expo/:path*", "destination": "https://jellying.vercel.app/_expo/:path*" },
-    { "source": "/assets/:path*", "destination": "https://jellying.vercel.app/assets/:path*" },
+    { "source": "/_expo/:path*", "destination": "https://monglekids-report.vercel.app/_expo/:path*" },
+    { "source": "/assets/:path*", "destination": "https://monglekids-report.vercel.app/assets/:path*" },
 
     { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/p/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Cache-Control", "value": "private, no-store" },
+        { "key": "Referrer-Policy", "value": "no-referrer" }
+      ]
+    }
   ]
 }
