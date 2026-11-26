@@ -4,6 +4,7 @@
     { "source": "/delete-account", "destination": "/delete-account/index.html" },
 
     { "source": "/p/:token", "destination": "https://monglekids-parent-report.vercel.app/p/:token" },
+    { "source": "/u/:token", "destination": "https://monglekids-parent-report.vercel.app/u/:token" },
     { "source": "/r/:token", "destination": "https://jellying.vercel.app/r/:token" },
     { "source": "/_expo/:path*", "destination": "https://monglekids-parent-report.vercel.app/_expo/:path*" },
     { "source": "/assets/:path*", "destination": "https://monglekids-parent-report.vercel.app/assets/:path*" },
@@ -13,6 +14,14 @@
   "headers": [
     {
       "source": "/p/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Cache-Control", "value": "private, no-store" },
+        { "key": "Referrer-Policy", "value": "no-referrer" }
+      ]
+    },
+    {
+      "source": "/u/(.*)",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
         { "key": "Cache-Control", "value": "private, no-store" },
