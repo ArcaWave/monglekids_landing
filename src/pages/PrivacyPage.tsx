@@ -230,7 +230,7 @@ export default function PrivacyPage() {
           />
           <P>
             이메일 주소는 계정 로그인 · 인증에 사용하며, 보호자가 직접 요청했거나 수신에 동의한
-            경우에 한해 학부모 리포트 메일(요청한 리포트 링크 · 주간 리포트)을 보내는 데 사용합니다.
+            경우에 한해 학부모 리포트 메일(요청한 리포트 링크 · 주간 · 월간 리포트)을 보내는 데 사용합니다.
           </P>
 
           <H4>2.2 아이 프로필 정보 (최소)</H4>
@@ -302,7 +302,7 @@ export default function PrivacyPage() {
               "서비스 제공 및 아동 맞춤 콘텐츠 제공",
               "학습 진행 상태 저장 및 별 · 뱃지 등 학습 성취 표시",
               "보호자 리포트 생성",
-              "보호자가 요청했거나 수신에 동의한 리포트 메일 발송 (요청한 리포트 링크 · 주간 리포트 — 광고 목적 아님)",
+              "보호자가 요청했거나 수신에 동의한 리포트 메일 발송 (요청한 리포트 링크 · 주간 · 월간 리포트 — 광고 목적 아님)",
               "카메라 · 음성 · 손 동작 인식 등 앱 기능 및 AI 기능 제공",
               "비식별 · 집계 데이터를 통한 교육 기능 및 서비스 · AI 품질 개선 · 개발",
               "서비스 보안 유지, 부정 접근 방지, 오류 방지 및 안정성 유지",
@@ -314,18 +314,18 @@ export default function PrivacyPage() {
             사용하지 않습니다.
           </P>
 
-          <H4>3.1 학부모 리포트 링크와 주간 리포트 메일</H4>
+          <H4>3.1 학부모 리포트 링크와 리포트 메일 (주간 · 월간)</H4>
           <P>
-            보호자가 앱에서 만들거나 주간 리포트 메일에 담긴 학부모 리포트 링크는 로그인 없이
+            보호자가 앱에서 만들거나 리포트 메일에 담긴 학부모 리포트 링크는 로그인 없이
             열리며, 만든 날부터 30일이 지나면 닫힙니다. 링크를 가진 사람은 누구나 해당 아이의
             리포트(닉네임, 놀이 활동 요약)를 볼 수 있으므로 다른 사람에게 전달하지 않도록 안내하고
             있으며, 보호자는 앱의 보호자 메뉴에서 언제든지 링크를 끊을 수 있습니다. 서버에는
             링크의 열쇠 자체가 아닌 해시값만 저장합니다.
           </P>
           <P>
-            주간 리포트 메일은 수신에 동의한 보호자에게만, 아이가 활동한 주에 한 번 보냅니다.
-            메일 하단의 수신 거부 링크 또는 앱의 [설정 &gt; 알림 설정]에서 언제든지 수신을 중단할
-            수 있습니다.
+            리포트 메일은 수신에 동의한 보호자에게만 보냅니다 — 주간 메일은 아이가 활동한 주에 한 번,
+            월간 메일은 아이가 활동한 달의 다음 달 초에 한 번입니다. 메일 하단의 수신 거부 링크 또는
+            앱의 [설정 &gt; 알림 설정]에서 언제든지 주간 · 월간 메일 수신을 함께 중단할 수 있습니다.
           </P>
 
           <H3>4. AI 기능과 데이터 처리</H3>
@@ -449,7 +449,7 @@ export default function PrivacyPage() {
               "삭제: 앱 내 [설정 > 개인정보 및 보안 > 계정 삭제]에서 직접 영구 삭제",
               "데이터 내보내기: 앱 내 [내 데이터 다운로드]",
               "동의 철회: 계정 삭제를 통해 가능",
-              "주간 리포트 메일 수신 거부: 메일 하단의 수신 거부 링크 또는 앱 내 [설정 > 알림 설정]",
+              "리포트 메일(주간 · 월간) 수신 거부: 메일 하단의 수신 거부 링크 또는 앱 내 [설정 > 알림 설정]",
               "학부모 리포트 링크 끊기: 앱 내 [보호자 메뉴 > 학부모 리포트 > 링크 끊기]",
             ]}
           />
@@ -558,7 +558,7 @@ export default function PrivacyPage() {
           <P>
             The email address is used for account login and authentication and, only when the
             guardian has requested it or opted in, to send parent report emails (a requested
-            report link or the weekly report).
+            report link, or the weekly and monthly reports).
           </P>
 
           <H4>2.2 Child Profile Information (Minimal)</H4>
@@ -629,7 +629,7 @@ export default function PrivacyPage() {
               "provide the service and child-appropriate content",
               "save learning progress and show achievements such as stars and badges",
               "generate parent reports",
-              "send report emails that the guardian requested or opted in to (a requested report link, the weekly report — not for advertising)",
+              "send report emails that the guardian requested or opted in to (a requested report link, the weekly and monthly reports — not for advertising)",
               "provide app and AI features such as voice input, color recognition, and hand-gesture recognition",
               "improve and develop educational features, the service, and AI quality using de-identified, aggregate data",
               "maintain security, prevent unauthorized access and errors, and ensure stability",
@@ -641,19 +641,21 @@ export default function PrivacyPage() {
             advertising-oriented user tracking, or sale of personal information.
           </P>
 
-          <H4>3.1 Parent Report Links and Weekly Report Email</H4>
+          <H4>3.1 Parent Report Links and Report Emails (Weekly · Monthly)</H4>
           <P>
-            A parent report link — created by the guardian in the app or included in the weekly
-            report email — opens without login and closes 30 days after it is created. Anyone
+            A parent report link — created by the guardian in the app or included in a report
+            email — opens without login and closes 30 days after it is created. Anyone
             who has the link can view that child’s report (nickname and a summary of play
             activity), so we ask guardians not to forward it, and the guardian can revoke links
             at any time from the guardian menu in the app. Our servers store only a hash of the
             link key, not the key itself.
           </P>
           <P>
-            The weekly report email is sent only to guardians who opted in, once in a week when
-            the child was active. You can stop it at any time using the unsubscribe link at the
-            bottom of the email or in the app at [Settings &gt; Notifications].
+            Report emails are sent only to guardians who opted in — the weekly email once in a
+            week when the child was active, and the monthly email once early in the month after
+            a month when the child was active. You can stop both at any time using the
+            unsubscribe link at the bottom of the email or in the app at [Settings &gt;
+            Notifications].
           </P>
 
           <H3>4. AI Features and Data Processing</H3>
@@ -781,7 +783,7 @@ export default function PrivacyPage() {
               "Deletion: permanently delete yourself in the app at [Settings > Privacy & Security > Delete Account]",
               "Data export: in the app at [Download My Data]",
               "Withdraw consent: available via account deletion",
-              "Unsubscribe from the weekly report email: the unsubscribe link at the bottom of the email, or in the app at [Settings > Notifications]",
+              "Unsubscribe from report emails (weekly · monthly): the unsubscribe link at the bottom of the email, or in the app at [Settings > Notifications]",
               "Revoke parent report links: in the app at [Guardian menu > Parent Report > Revoke links]",
             ]}
           />
