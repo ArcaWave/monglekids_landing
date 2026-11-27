@@ -8,8 +8,8 @@ import { SITE } from "../seo/site";
 
 const EFFECTIVE_DATE_KO = "2026년 6월 13일";
 const EFFECTIVE_DATE_EN = "June 13, 2026";
-const LAST_UPDATED_KO = "2026년 7월 22일";
-const LAST_UPDATED_EN = "July 22, 2026";
+const LAST_UPDATED_KO = "2026년 11월 27일";
+const LAST_UPDATED_EN = "November 27, 2026";
 const ADDRESS_KO = "서울특별시 성북구 보문로29가길 48";
 const ADDRESS_EN = "48 Bomun-ro 29ga-gil, Seongbuk-gu, Seoul, Republic of Korea";
 const BIZ_NO = SITE.operator.bizRegNo;
@@ -228,6 +228,10 @@ export default function PrivacyPage() {
               "소셜 로그인 식별자 (Apple, Google, Kakao 등 이용 시 제공되는 계정 식별자)",
             ]}
           />
+          <P>
+            이메일 주소는 계정 로그인 · 인증에 사용하며, 보호자가 직접 요청했거나 수신에 동의한
+            경우에 한해 학부모 리포트 메일(요청한 리포트 링크 · 주간 리포트)을 보내는 데 사용합니다.
+          </P>
 
           <H4>2.2 아이 프로필 정보 (최소)</H4>
           <UL
@@ -298,6 +302,7 @@ export default function PrivacyPage() {
               "서비스 제공 및 아동 맞춤 콘텐츠 제공",
               "학습 진행 상태 저장 및 별 · 뱃지 등 학습 성취 표시",
               "보호자 리포트 생성",
+              "보호자가 요청했거나 수신에 동의한 리포트 메일 발송 (요청한 리포트 링크 · 주간 리포트 — 광고 목적 아님)",
               "카메라 · 음성 · 손 동작 인식 등 앱 기능 및 AI 기능 제공",
               "비식별 · 집계 데이터를 통한 교육 기능 및 서비스 · AI 품질 개선 · 개발",
               "서비스 보안 유지, 부정 접근 방지, 오류 방지 및 안정성 유지",
@@ -307,6 +312,20 @@ export default function PrivacyPage() {
           <P>
             회사는 어린이 정보를 광고, 맞춤형 광고, 광고 목적의 사용자 추적, 또는 판매 목적으로
             사용하지 않습니다.
+          </P>
+
+          <H4>3.1 학부모 리포트 링크와 주간 리포트 메일</H4>
+          <P>
+            보호자가 앱에서 만들거나 주간 리포트 메일에 담긴 학부모 리포트 링크는 로그인 없이
+            열리며, 만든 날부터 30일이 지나면 닫힙니다. 링크를 가진 사람은 누구나 해당 아이의
+            리포트(닉네임, 놀이 활동 요약)를 볼 수 있으므로 다른 사람에게 전달하지 않도록 안내하고
+            있으며, 보호자는 앱의 보호자 메뉴에서 언제든지 링크를 끊을 수 있습니다. 서버에는
+            링크의 열쇠 자체가 아닌 해시값만 저장합니다.
+          </P>
+          <P>
+            주간 리포트 메일은 수신에 동의한 보호자에게만, 아이가 활동한 주에 한 번 보냅니다.
+            메일 하단의 수신 거부 링크 또는 앱의 [설정 &gt; 알림 설정]에서 언제든지 수신을 중단할
+            수 있습니다.
           </P>
 
           <H3>4. AI 기능과 데이터 처리</H3>
@@ -333,6 +352,7 @@ export default function PrivacyPage() {
             items={[
               "Supabase — 인증 · 백엔드 · 데이터 저장",
               "Vercel — 웹 호스팅",
+              "Resend — 이메일 발송 (보호자 이메일 주소, 메일 본문의 아이 닉네임 · 리포트 링크)",
               "Sentry — 오류 · 크래시 진단 (개인식별정보 미포함 설정)",
               "Apple / Google / Kakao — 소셜 로그인",
               "OS 제공사(Apple 등) — 음성 인식 (온디바이스 미지원 시)",
@@ -380,7 +400,7 @@ export default function PrivacyPage() {
           <H3>8. 국외 이전</H3>
           <P>
             회사가 사용하는 서비스 제공자의 서버는 대한민국, 미국 또는 기타 국가에 위치할 수
-            있습니다(예: Supabase, Vercel, Sentry, OS 음성 인식 제공사, 향후 AI 처리자). 실제 저장
+            있습니다(예: Supabase, Vercel, Resend, Sentry, OS 음성 인식 제공사, 향후 AI 처리자). 실제 저장
             위치는 각 제공자의 설정과 리전에 따라 달라질 수 있습니다. 회사는 관련 법령에 따라
             필요한 고지 · 동의 · 계약상 보호 조치 · 접근 제한 · 암호화 통신 등 합리적인 보호
             조치를 적용합니다.
@@ -429,6 +449,8 @@ export default function PrivacyPage() {
               "삭제: 앱 내 [설정 > 개인정보 및 보안 > 계정 삭제]에서 직접 영구 삭제",
               "데이터 내보내기: 앱 내 [내 데이터 다운로드]",
               "동의 철회: 계정 삭제를 통해 가능",
+              "주간 리포트 메일 수신 거부: 메일 하단의 수신 거부 링크 또는 앱 내 [설정 > 알림 설정]",
+              "학부모 리포트 링크 끊기: 앱 내 [보호자 메뉴 > 학부모 리포트 > 링크 끊기]",
             ]}
           />
           <P>
@@ -533,6 +555,11 @@ export default function PrivacyPage() {
               "social login identifier (account identifier provided when using Apple, Google, or Kakao login)",
             ]}
           />
+          <P>
+            The email address is used for account login and authentication and, only when the
+            guardian has requested it or opted in, to send parent report emails (a requested
+            report link or the weekly report).
+          </P>
 
           <H4>2.2 Child Profile Information (Minimal)</H4>
           <UL
@@ -602,6 +629,7 @@ export default function PrivacyPage() {
               "provide the service and child-appropriate content",
               "save learning progress and show achievements such as stars and badges",
               "generate parent reports",
+              "send report emails that the guardian requested or opted in to (a requested report link, the weekly report — not for advertising)",
               "provide app and AI features such as voice input, color recognition, and hand-gesture recognition",
               "improve and develop educational features, the service, and AI quality using de-identified, aggregate data",
               "maintain security, prevent unauthorized access and errors, and ensure stability",
@@ -611,6 +639,21 @@ export default function PrivacyPage() {
           <P>
             We do not use children’s information for advertising, targeted advertising,
             advertising-oriented user tracking, or sale of personal information.
+          </P>
+
+          <H4>3.1 Parent Report Links and Weekly Report Email</H4>
+          <P>
+            A parent report link — created by the guardian in the app or included in the weekly
+            report email — opens without login and closes 30 days after it is created. Anyone
+            who has the link can view that child’s report (nickname and a summary of play
+            activity), so we ask guardians not to forward it, and the guardian can revoke links
+            at any time from the guardian menu in the app. Our servers store only a hash of the
+            link key, not the key itself.
+          </P>
+          <P>
+            The weekly report email is sent only to guardians who opted in, once in a week when
+            the child was active. You can stop it at any time using the unsubscribe link at the
+            bottom of the email or in the app at [Settings &gt; Notifications].
           </P>
 
           <H3>4. AI Features and Data Processing</H3>
@@ -639,6 +682,7 @@ export default function PrivacyPage() {
             items={[
               "Supabase — authentication, backend, and data storage",
               "Vercel — web hosting",
+              "Resend — email delivery (guardian email address; child nickname and report link in the email body)",
               "Sentry — error and crash diagnostics (configured without personally identifiable information)",
               "Apple / Google / Kakao — social login",
               "OS providers (Apple, etc.) — speech recognition (when on-device is unsupported)",
@@ -686,7 +730,7 @@ export default function PrivacyPage() {
           <H3>8. International Data Transfer</H3>
           <P>
             Servers used by our service providers may be located in South Korea, the United
-            States, or other countries (e.g., Supabase, Vercel, Sentry, OS speech-recognition
+            States, or other countries (e.g., Supabase, Vercel, Resend, Sentry, OS speech-recognition
             providers, and future AI processors). Actual storage location may vary by each
             provider’s configuration and region. We apply reasonable safeguards such as notice,
             consent where required, contractual protections, access controls, and encrypted
@@ -737,6 +781,8 @@ export default function PrivacyPage() {
               "Deletion: permanently delete yourself in the app at [Settings > Privacy & Security > Delete Account]",
               "Data export: in the app at [Download My Data]",
               "Withdraw consent: available via account deletion",
+              "Unsubscribe from the weekly report email: the unsubscribe link at the bottom of the email, or in the app at [Settings > Notifications]",
+              "Revoke parent report links: in the app at [Guardian menu > Parent Report > Revoke links]",
             ]}
           />
           <P>
