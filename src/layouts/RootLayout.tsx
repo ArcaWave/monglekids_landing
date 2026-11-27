@@ -1,7 +1,8 @@
 import { useEffect } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { LanguageProvider } from "../i18n/LanguageContext";
 import { HEADER_OFFSET } from "../lib/useScrollToSection";
+import { looksLikeAuthReturn } from "../lib/authReturn";
 
 /**
  * Root layout. Wraps every page with the language context.
@@ -15,6 +16,7 @@ import { HEADER_OFFSET } from "../lib/useScrollToSection";
 export default function RootLayout() {
   return (
     <LanguageProvider>
+      <AuthReturnRedirect />
       <ScrollManager />
       <Outlet />
     </LanguageProvider>
@@ -43,6 +45,22 @@ function ScrollManager() {
     }
     window.scrollTo(0, 0);
   }, [pathname, hash]);
+
+  return null;
+}
+
+/**
+ * 앱 가입 확인 메일의 링크는 인증을 끝낸 뒤 첫 화면(/)으로 돌아온다(앱이 돌아갈 주소를 따로 넘기지 않으면
+ * Supabase 의 기본 주소). 그대로 두면 홈페이지만 떠서 인증이 안 된 것처럼 보이므로 결과 화면으로 넘긴다.
+ */
+function AuthReturnRedirect() {
+  const { pathname, search, hash } = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (pathname !== "/" || !looksLikeAuthReturn(search, hash)) return;
+    navigate(`/auth/confirmed${search}${hash}`, { replace: true });
+  }, [pathname, search, hash, navigate]);
 
   return null;
 }

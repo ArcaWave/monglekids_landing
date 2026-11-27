@@ -10,6 +10,7 @@ import NewsIssuePage from "./pages/NewsIssuePage";
 import UnsubscribePage from "./pages/UnsubscribePage";
 import DeleteAccountPage from "./pages/DeleteAccountPage";
 import TermsPage from "./pages/TermsPage";
+import AuthConfirmedPage from "./pages/AuthConfirmedPage";
 import { allSlugs } from "./lib/newsletters";
 
 export const routes: RouteRecord[] = [
@@ -68,6 +69,12 @@ export const routes: RouteRecord[] = [
         path: "terms",
         Component: TermsPage,
         entry: "src/pages/TermsPage.tsx",
+      },
+      {
+        // 앱 가입 확인 메일의 링크를 누른 뒤 (첫 화면에 인증 값이 붙어 오면 RootLayout 이 이리로 넘긴다)
+        path: "auth/confirmed",
+        Component: AuthConfirmedPage,
+        entry: "src/pages/AuthConfirmedPage.tsx",
       },
     ],
   },
